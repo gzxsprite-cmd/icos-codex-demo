@@ -98,12 +98,13 @@ body {
 }
 
 .content-area {
-  display: grid;
-  grid-template-columns: 22% 38% 40%;
+  display: flex;
+  align-items: stretch;
   gap: 16px;
   padding: 16px 24px 32px;
   flex: 1;
   min-height: 0;
+  width: 100%;
 }
 
 .column {
@@ -118,7 +119,7 @@ body {
 }
 
 .step1 {
-  width: 22%;
+  flex: 0 0 20%;
   overflow-y: auto;
   max-height: calc(100vh - 90px);
   padding-right: 8px;
@@ -126,6 +127,7 @@ body {
 }
 
 .step2 {
+  flex: 0 0 50%;
   overflow-y: auto;
   max-height: calc(100vh - 120px);
   padding-right: 8px;
@@ -133,10 +135,12 @@ body {
 }
 
 .step3 {
+  flex: 0 0 30%;
   overflow: hidden;
   max-height: calc(100vh - 120px);
   padding-right: 8px;
   scrollbar-gutter: stable both-edges;
+  min-width: 360px;
 }
 
 .column h2 {
