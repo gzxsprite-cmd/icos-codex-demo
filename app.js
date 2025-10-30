@@ -496,8 +496,10 @@ const step2 = document.getElementById('step2');
 const step3 = document.getElementById('step3');
 
 function renderApp() {
-  document.querySelectorAll('.top-bar .mode-tab').forEach((btn) => {
-    btn.classList.toggle('active', btn.dataset.mode === state.mode);
+  document.querySelectorAll('.mode-switch-bar .mode-tab').forEach((btn) => {
+    const isActive = btn.dataset.mode === state.mode;
+    btn.classList.toggle('active', isActive);
+    btn.setAttribute('aria-pressed', String(isActive));
   });
 
   if (state.mode === 'focus') {
@@ -756,7 +758,7 @@ function renderFocusStep2() {
   const datasets = latestCases.map((item, idx) => {
     const years = Object.keys(item.prices).map((year) => Number(year));
     return {
-      label: `${item.competitor} – ${item.tech.join('/')} – ${item.sopYear}`,
+      label: `${item.client} – ${item.project} – ${item.product} – ${item.sopYear}`,
       data: years.map((year) => ({ x: year, y: item.prices[year] })),
       tension: 0.3,
       borderWidth: 2,
@@ -1107,6 +1109,8 @@ function renderDetailCards(cases) {
       <span class="mode-hint">Pinned cases stay even if filters change.</span>
     </div>
   `;
+  const panel = document.createElement('div');
+  panel.className = 'details-panel';
   const resetBar = document.createElement('div');
   resetBar.className = 'detail-reset';
   const resetButton = document.createElement('button');
@@ -1117,7 +1121,7 @@ function renderDetailCards(cases) {
     renderApp();
   });
   resetBar.appendChild(resetButton);
-  step3.appendChild(resetBar);
+  panel.appendChild(resetBar);
   const container = document.createElement('div');
   container.className = 'detail-cards';
   cases.forEach((item) => {
@@ -1176,7 +1180,8 @@ function renderDetailCards(cases) {
     });
     container.appendChild(card);
   });
-  step3.appendChild(container);
+  panel.appendChild(container);
+  step3.appendChild(panel);
 }
 
 function highlightCase(caseId) {
@@ -1238,6 +1243,7 @@ leadForm.addEventListener('submit', (e) => {
     prices: {},
     pcrRate: Number(document.getElementById('leadPcrRate').value) || null,
     pcrYears: Number(document.getElementById('leadPcrYears').value) || null,
+    competitorProduct: document.getElementById('leadCompProduct').value || null,
     leadMonth: leadMonthValue,
     tier: 'L1',
     source: 'User Submitted',
@@ -1274,6 +1280,7 @@ function getContextDefaults() {
 }
 
 function showToast() {
+  toast.textContent = '✅ New price lead saved successfully!';
   toast.classList.add('show');
   toast.classList.remove('hidden');
   setTimeout(() => {
@@ -1285,7 +1292,7 @@ function showToast() {
 // -----------------------------
 // Mode Switch & Modal handlers
 // -----------------------------
-document.querySelectorAll('.top-bar .mode-tab').forEach((btn) => {
+document.querySelectorAll('.mode-switch-bar .mode-tab').forEach((btn) => {
   btn.addEventListener('click', () => {
     state.mode = btn.dataset.mode;
     renderApp();
