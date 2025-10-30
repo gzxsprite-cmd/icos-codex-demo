@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>iCoS Commercial v3.2 Demo</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div id="app" class="app-container">
+    <header class="top-bar">
+      <div class="title-group">
+        <h1>iCoS Commercial v3.2</h1>
+        <p class="subtitle">Dual Mode Visualization Demo</p>
+      </div>
+      <div class="mode-switch">
+        <button class="mode-tab active" data-mode="focus">Find Prices</button>
+        <button class="mode-tab" data-mode="explore">See What's New</button>
+      </div>
+    </header>
+
+    <button class="floating-action" id="newLeadBtn">➕ New Price Lead</button>
+
+    <main class="content-area">
+      <section class="column step1" id="step1"></section>
+      <section class="column step2" id="step2"></section>
+      <section class="column step3" id="step3"></section>
+    </main>
+  </div>
+
+  <div class="modal-overlay hidden" id="chartHintModal">
+    <div class="modal">
+      <h3>Dataset Notice</h3>
+      <p>Current dataset: <span id="datasetCount">0</span> lines.<br />
+      Showing only the latest 10 by lead date.</p>
+      <p>You can:</p>
+      <div class="modal-actions">
+        <button id="adjustFilters">🔍 Adjust filters</button>
+        <button id="advancedFilter">🎯 Advanced filter</button>
+      </div>
+      <label class="checkbox">
+        <input type="checkbox" id="hideHintCheckbox" /> Don't show again
+      </label>
+    </div>
+  </div>
+
+  <div class="modal-overlay hidden" id="newLeadModal">
+    <div class="modal large">
+      <div class="modal-header">
+        <h3>New Price Lead</h3>
+        <button class="close-modal" data-close>✕</button>
+      </div>
+      <form id="leadForm" class="form-grid">
+        <div class="form-group">
+          <label>Product</label>
+          <input type="text" id="leadProduct" readonly />
+        </div>
+        <div class="form-group">
+          <label>Competitor</label>
+          <input type="text" id="leadCompetitor" readonly />
+        </div>
+        <div class="form-group">
+          <label>Tech Params</label>
+          <input type="text" id="leadTech" readonly />
+        </div>
+        <div class="form-group">
+          <label>Customer *</label>
+          <input type="text" id="leadCustomer" required />
+        </div>
+        <div class="form-group">
+          <label>Project *</label>
+          <input type="text" id="leadProject" required />
+        </div>
+        <div class="form-group">
+          <label>Volume *</label>
+          <input type="number" id="leadVolume" required />
+        </div>
+        <div class="form-group">
+          <label>SOP Year *</label>
+          <input type="number" id="leadSop" required />
+        </div>
+        <div class="form-group">
+          <label>SOP Price *</label>
+          <input type="number" id="leadPrice" required />
+        </div>
+        <div class="form-group">
+          <label>PCR Rate (%)</label>
+          <input type="number" id="leadPcrRate" />
+        </div>
+        <div class="form-group">
+          <label>PCR Years</label>
+          <input type="number" id="leadPcrYears" />
+        </div>
+        <div class="form-group form-group--full">
+          <details>
+            <summary>More Info</summary>
+            <label>Competitor Product</label>
+            <input type="text" id="leadCompProduct" />
+            <label>Special Terms</label>
+            <textarea id="leadTerms"></textarea>
+          </details>
+        </div>
+        <div class="form-actions form-group--full">
+          <button type="submit" class="primary">Submit</button>
+          <button type="button" data-close>Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="toast hidden" id="toast">Lead saved successfully</div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
