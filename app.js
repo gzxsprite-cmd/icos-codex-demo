@@ -8,7 +8,7 @@ const caseDataset = [
     project: 'Alpha Plus',
     product: 'IPB',
     competitor: 'Conti',
-    tech: ['RoPP41'],
+    tech: ['RoPP41', 'RSV'],
     sopYear: 2025,
     sopPrice: 1280,
     prices: { 2025: 1280, 2026: 1240, 2027: 1200, 2028: 1180, 2029: 1165 },
@@ -92,7 +92,7 @@ const caseDataset = [
     project: 'Crown',
     product: 'iBooster',
     competitor: 'BTL',
-    tech: ['WOP'],
+    tech: ['WOP', 'RSV'],
     sopYear: 2024,
     sopPrice: 1420,
     prices: { 2024: 1420, 2025: 1400, 2026: 1375, 2027: 1360, 2028: 1345 },
@@ -415,7 +415,7 @@ const segmentConfig = {
       id: 'segment-my-2',
       name: 'ESP ZF RSV',
       summary: '新增 +1 ｜ 新低 0',
-      filter: { product: 'ESP', competitors: ['ZF'], tech: ['APB-Mi'] }
+      filter: { product: 'ESP', competitors: ['ZF'], tech: ['RSV'] }
     },
     {
       id: 'segment-my-3',
@@ -425,11 +425,11 @@ const segmentConfig = {
     }
   ],
   popular: [
-    { name: 'IPB Conti', score: 95 },
-    { name: 'ESP Price Hunt', score: 90 },
-    { name: 'IPB vs Market', score: 88 },
-    { name: 'IPB ZF RSV', score: 86 },
-    { name: 'ESP Global Watch', score: 84 }
+    { name: 'IPB Conti', score: 95, filter: { product: 'IPB', competitors: ['Conti'], tech: [] } },
+    { name: 'ESP Price Hunt', score: 90, filter: { product: 'ESP', competitors: [], tech: ['APB-Mi'] } },
+    { name: 'IPB vs Market', score: 88, filter: { product: 'IPB', competitors: [], tech: [] } },
+    { name: 'IPB ZF RSV', score: 86, filter: { product: 'IPB', competitors: ['ZF'], tech: ['RSV'] } },
+    { name: 'ESP Global Watch', score: 84, filter: { product: 'ESP', competitors: [], tech: ['iTPMs'] } }
   ],
   leaderboard: {
     monthly: [
@@ -467,7 +467,12 @@ const state = {
   exploreSnapshot: 'monthly',
   exploreSegment: null,
   exploreExpanded: { L3: true, L2: true, L1: false },
-  leaderboardExpanded: false
+  leaderboardExpanded: false,
+  priceInfoCollapsed: new Set(),
+  segmentGroupOpen: { predefined: true, mine: true },
+  customSegmentOpen: false,
+  activePopularSegment: null,
+  flashSegmentName: null
 };
 
 // Utility helpers
@@ -503,6 +508,73 @@ function matchesFilters(item, filters) {
   return true;
 }
 
+const timeLabels = {
+  '3m': '近3月',
+  '6m': '近6月',
+  '12m': '近12月'
+};
+
+function getActiveExploreFilter() {
+  if (state.exploreSegment?.filter) {
+    return state.exploreSegment.filter;
+  }
+  return {
+    product: state.filters.product,
+    competitors: state.filters.competitors ?? [],
+    tech: state.filters.tech ?? []
+  };
+}
+
+function buildFocusTags() {
+  const filters = state.filters;
+  const tags = [];
+  if (filters.time) tags.push({ label: `线索时间: ${timeLabels[filters.time] || filters.time}` });
+  if (filters.product) tags.push({ label: `产品: ${filters.product}` });
+  if (filters.competitors) {
+    const text = filters.competitors.length ? filters.competitors.join(', ') : '全部';
+    tags.push({ label: `对手: ${text}` });
+  }
+  if (filters.tech) {
+    const text = filters.tech.length ? filters.tech.join(', ') : '全部';
+    tags.push({ label: `参数: ${text}` });
+  }
+  if (filters.more.customer) tags.push({ label: `客户: ${filters.more.customer}` });
+  if (filters.more.volume) tags.push({ label: `体量: ${filters.more.volume}` });
+  if (filters.more.terms) tags.push({ label: `条款: ${filters.more.terms}` });
+  return tags;
+}
+
+function buildExploreTags() {
+  const tags = [];
+  tags.push({ label: `月份: ${formatMonth(state.exploreMonth)}` });
+  const segmentName = state.exploreSegment?.name || '全部';
+  tags.push({ label: `Segment: ${segmentName}` });
+  const filter = getActiveExploreFilter();
+  if (filter.product) tags.push({ label: `产品: ${filter.product}` });
+  if (filter.competitors) {
+    const text = filter.competitors.length ? filter.competitors.join(', ') : '全部';
+    tags.push({ label: `对手: ${text}` });
+  }
+  if (filter.tech) {
+    const text = filter.tech.length ? filter.tech.join(', ') : '全部';
+    tags.push({ label: `参数: ${text}` });
+  }
+  return tags;
+}
+
+function createTagRow(tags) {
+  const row = document.createElement('div');
+  row.className = 'active-tags';
+  tags.forEach((tag) => {
+    const chip = document.createElement('span');
+    chip.className = 'tag-chip';
+    chip.textContent = tag.label;
+    chip.title = `Filtered by: ${tag.label}`;
+    row.appendChild(chip);
+  });
+  return row;
+}
+
 // Rendering entry point
 const step1 = document.getElementById('step1');
 const step2 = document.getElementById('step2');
@@ -518,6 +590,8 @@ function renderApp() {
   if (state.mode === 'focus') {
     state.exploreSegment = null;
     state.leaderboardExpanded = false;
+    state.activePopularSegment = null;
+    state.flashSegmentName = null;
     renderFocusStep1();
     renderFocusStep2();
     renderDetailCards(getFocusVisibleCases());
@@ -553,15 +627,38 @@ function renderFocusStep1() {
     savedList.appendChild(empty);
   } else {
     state.savedFilters.forEach((saved, idx) => {
-      const btn = document.createElement('div');
-      btn.className = 'saved-filter';
-      btn.innerHTML = `<strong>Set ${idx + 1}</strong>
+      const item = document.createElement('div');
+      item.className = 'saved-filter';
+      const content = document.createElement('div');
+      content.className = 'saved-filter-content';
+      content.innerHTML = `<strong>Set ${idx + 1}</strong>
         <span>${saved.time.toUpperCase()} • ${saved.product} • ${saved.competitors.join(', ') || 'All'} • ${saved.tech.join(', ') || 'All'}</span>`;
-      btn.addEventListener('click', () => {
-    state.filters = deepClone(saved);
-    renderApp();
-  });
-  savedList.appendChild(btn);
+      const deleteBtn = document.createElement('button');
+      deleteBtn.className = 'saved-filter-delete';
+      deleteBtn.type = 'button';
+      deleteBtn.setAttribute('aria-label', `Delete saved set ${idx + 1}`);
+      deleteBtn.textContent = '❌';
+      deleteBtn.addEventListener('click', (event) => {
+        event.stopPropagation();
+        openConfirm({
+          message: 'Are you sure you want to delete this saved set?',
+          confirmLabel: 'Delete',
+          onConfirm: () => {
+            item.classList.add('is-deleting');
+            setTimeout(() => {
+              state.savedFilters.splice(idx, 1);
+              renderApp();
+              showToast('✅ Deleted successfully');
+            }, 300);
+          }
+        });
+      });
+      item.append(content, deleteBtn);
+      item.addEventListener('click', () => {
+        state.filters = deepClone(saved);
+        renderApp();
+      });
+      savedList.appendChild(item);
     });
   }
   savedBlock.appendChild(savedList);
@@ -643,7 +740,7 @@ function renderFocusStep1() {
   techGroup.innerHTML = '<h3>Tech Params</h3>';
   const techChips = document.createElement('div');
   techChips.className = 'chips';
-  ['RoPP41', 'APB-Mi', 'iTPMs', 'WOP'].forEach((tech) => {
+  ['RoPP41', 'APB-Mi', 'iTPMs', 'WOP', 'RSV'].forEach((tech) => {
     const chip = document.createElement('div');
     chip.className = 'chip';
     chip.textContent = tech;
@@ -704,6 +801,7 @@ function renderFocusStep1() {
     state.filters = deepClone(DEFAULT_FILTERS);
     state.pinned.clear();
     state.hidden.clear();
+    state.priceInfoCollapsed.clear();
     renderApp();
   });
   const saveBtn = document.createElement('button');
@@ -743,6 +841,8 @@ function renderFocusStep2() {
       <span class="mode-hint">Multi-line chart of filtered cases</span>
     </div>
   `;
+  const tagsRow = createTagRow(buildFocusTags());
+  container.appendChild(tagsRow);
   const chartHolder = document.createElement('div');
   chartHolder.className = 'chart-container';
   chartHolder.innerHTML = '<canvas id="priceChart"></canvas>';
@@ -771,15 +871,18 @@ function renderFocusStep2() {
   const ctx = document.getElementById('priceChart');
   const datasets = latestCases.map((item, idx) => {
     const years = Object.keys(item.prices).map((year) => Number(year));
+    const baseColor = chartPalette[idx % chartPalette.length];
     return {
       label: `${item.client} – ${item.project} – ${item.product} – ${item.sopYear}`,
       data: years.map((year) => ({ x: year, y: item.prices[year] })),
       tension: 0.3,
       borderWidth: 2,
+      hoverBorderWidth: 3,
       pointRadius: 4,
-      borderColor: chartPalette[idx % chartPalette.length],
-      backgroundColor: chartPalette[idx % chartPalette.length],
-      caseId: item.id
+      borderColor: baseColor,
+      backgroundColor: baseColor,
+      caseId: item.id,
+      baseColor
     };
   });
 
@@ -790,7 +893,9 @@ function renderFocusStep2() {
     data: { datasets },
     options: {
       responsive: true,
-      maintainAspectRatio: false,
+      maintainAspectRatio: true,
+      aspectRatio: 2.5,
+      interaction: { mode: 'nearest', intersect: false },
       parsing: false,
       scales: {
         x: {
@@ -810,6 +915,15 @@ function renderFocusStep2() {
             defaultLegendClick.call(legend.chart, evt, legendItem, legend);
             const dataset = legend.chart.data.datasets[legendItem.datasetIndex];
             highlightCase(dataset.caseId);
+          },
+          onHover: (evt, legendItem, legend) => {
+            if (evt?.native?.target) {
+              evt.native.target.style.cursor = 'pointer';
+            }
+            applyChartFocus(legend.chart, legendItem.datasetIndex);
+          },
+          onLeave: (evt, legendItem, legend) => {
+            applyChartFocus(legend.chart, null);
           }
         },
         tooltip: {
@@ -828,12 +942,43 @@ function renderFocusStep2() {
         const datasetIndex = elements[0].datasetIndex;
         const dataset = state.chartInstance.data.datasets[datasetIndex];
         highlightCase(dataset.caseId);
+      },
+      onHover: (evt, activeElements) => {
+        if (evt?.native?.target) {
+          evt.native.target.style.cursor = activeElements.length ? 'pointer' : 'default';
+        }
+        if (activeElements.length) {
+          applyChartFocus(state.chartInstance, activeElements[0].datasetIndex);
+        } else {
+          applyChartFocus(state.chartInstance, null);
+        }
       }
     }
   });
+  applyChartFocus(state.chartInstance, null);
 }
 
 const chartPalette = ['#0B5CFF', '#3B82F6', '#6366F1', '#F59E0B', '#EF4444', '#10B981', '#14B8A6', '#8B5CF6', '#EC4899', '#F97316'];
+
+function hexToRgba(hex, alpha = 1) {
+  const bigint = parseInt(hex.replace('#', ''), 16);
+  const r = (bigint >> 16) & 255;
+  const g = (bigint >> 8) & 255;
+  const b = bigint & 255;
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
+
+function applyChartFocus(chart, focusIndex) {
+  if (!chart) return;
+  chart.data.datasets.forEach((dataset, idx) => {
+    const isActive = focusIndex === null || focusIndex === idx;
+    const alpha = isActive ? 1 : 0.3;
+    dataset.borderColor = hexToRgba(dataset.baseColor, alpha);
+    dataset.backgroundColor = hexToRgba(dataset.baseColor, alpha);
+    dataset.borderWidth = isActive && focusIndex !== null ? 3 : 2;
+  });
+  chart.update('none');
+}
 
 function showChartHint(total) {
   const modal = document.getElementById('chartHintModal');
@@ -850,6 +995,24 @@ function showChartHint(total) {
 // -----------------------------
 // Explore Mode Rendering
 // -----------------------------
+function activateExploreSegment(segment, options = {}) {
+  state.exploreSegment = segment;
+  state.filters = {
+    time: '6m',
+    product: segment.filter.product,
+    competitors: segment.filter.competitors ?? [],
+    tech: segment.filter.tech ?? [],
+    more: { customer: null, volume: null, terms: null }
+  };
+  state.mode = 'explore';
+  if (options.popularName) {
+    state.activePopularSegment = options.popularName;
+  } else {
+    state.activePopularSegment = null;
+  }
+  renderApp();
+}
+
 function renderExploreStep1() {
   step1.innerHTML = `
     <div class="section-title">
@@ -888,150 +1051,259 @@ function renderExploreStep1() {
   });
   monthNav.append(prevBtn, monthLabel, nextBtn, select);
   container.appendChild(monthNav);
+  const buildSegmentCard = (segment, { deletable = false } = {}) => {
+    const row = document.createElement('div');
+    row.className = 'segment-card';
+    if (state.exploreSegment?.id === segment.id) {
+      row.classList.add('active');
+    }
+    const info = document.createElement('div');
+    info.className = 'segment-card-info';
+    info.innerHTML = `<strong>${segment.name}</strong><span>${segment.summary}</span>`;
+    const actions = document.createElement('div');
+    actions.className = 'segment-card-actions';
+    const useBtn = document.createElement('button');
+    useBtn.type = 'button';
+    useBtn.className = 'segment-find';
+    useBtn.textContent = '查找';
+    useBtn.addEventListener('click', () => {
+      state.flashSegmentName = null;
+      activateExploreSegment(segment);
+    });
+    actions.appendChild(useBtn);
+    if (deletable) {
+      const delBtn = document.createElement('button');
+      delBtn.type = 'button';
+      delBtn.className = 'segment-delete';
+      delBtn.textContent = '❌';
+      delBtn.addEventListener('click', (event) => {
+        event.stopPropagation();
+        openConfirm({
+          message: 'Are you sure you want to delete this segment?',
+          confirmLabel: 'Delete',
+          onConfirm: () => {
+            row.classList.add('is-deleting');
+            setTimeout(() => {
+              segmentConfig.mySegments = segmentConfig.mySegments.filter((s) => s.id !== segment.id);
+              if (state.exploreSegment?.id === segment.id) {
+                state.exploreSegment = null;
+                state.activePopularSegment = null;
+              }
+              showToast('✅ Segment deleted');
+              renderApp();
+            }, 300);
+          }
+        });
+      });
+      actions.appendChild(delBtn);
+    }
+    row.append(info, actions);
+    row.addEventListener('click', (event) => {
+      if (event.target.closest('button')) return;
+      useBtn.click();
+    });
+    return row;
+  };
 
-  const renderSegmentList = (title, segments) => {
-    const header = document.createElement('h4');
-    header.textContent = title;
-    container.appendChild(header);
+  const renderGroup = (key, title, segments, options = {}) => {
+    const group = document.createElement('div');
+    group.className = 'segment-group';
+    const header = document.createElement('button');
+    header.type = 'button';
+    header.className = 'collapsible-header';
+    if (state.segmentGroupOpen[key] === undefined) {
+      state.segmentGroupOpen[key] = true;
+    }
+    const expanded = state.segmentGroupOpen[key];
+    header.setAttribute('aria-expanded', String(expanded));
+    header.innerHTML = `<span>${title}</span><span class="chevron" aria-hidden="true">▸</span>`;
+    header.addEventListener('click', () => {
+      state.segmentGroupOpen[key] = !state.segmentGroupOpen[key];
+      renderExploreStep1();
+    });
+    group.appendChild(header);
+    const body = document.createElement('div');
+    body.className = 'collapsible-body segment-card-list';
     if (!segments.length) {
       const empty = document.createElement('div');
       empty.className = 'mode-hint';
-      empty.textContent = title === 'My Segments' ? 'No saved segments yet.' : 'No segments available.';
-      container.appendChild(empty);
-      return;
+      empty.textContent = options.deletable ? 'No saved segments yet.' : 'No segments available.';
+      body.appendChild(empty);
+    } else {
+      segments.forEach((segment) => {
+        const card = buildSegmentCard(segment, { deletable: options.deletable });
+        body.appendChild(card);
+      });
     }
-    segments.forEach((segment) => {
-      const row = document.createElement('div');
-      row.className = 'segment-row';
-      if (state.exploreSegment?.id === segment.id) {
-        row.classList.add('active');
-      }
-      row.innerHTML = `
-        <strong>${segment.name}</strong>
-        <span>${segment.summary}</span>
-      `;
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.textContent = '查找';
-      btn.addEventListener('click', () => {
-        state.exploreSegment = segment;
-        state.filters = {
-          time: '6m',
-          product: segment.filter.product,
-          competitors: segment.filter.competitors ?? [],
-          tech: segment.filter.tech ?? [],
-          more: { customer: null, volume: null, terms: null }
-        };
-        state.mode = 'explore';
-        renderApp();
-      });
-      row.appendChild(btn);
-      row.addEventListener('click', (event) => {
-        if (event.target.tagName.toLowerCase() === 'button') return;
-        btn.click();
-      });
-      container.appendChild(row);
+    group.appendChild(body);
+    container.appendChild(group);
+    requestAnimationFrame(() => {
+      body.style.maxHeight = expanded ? `${body.scrollHeight}px` : '0px';
+      group.classList.toggle('expanded', expanded);
     });
   };
 
-  renderSegmentList('Predefined Segments', segmentConfig.predefined);
-  renderSegmentList('My Segments', segmentConfig.mySegments);
+  renderGroup('predefined', 'Predefined Segments', segmentConfig.predefined);
+  renderGroup('mine', 'My Segments', segmentConfig.mySegments, { deletable: true });
 
-  const custom = document.createElement('div');
-  custom.className = 'filter-group';
-  custom.innerHTML = `
-    <h3>Create Custom Segment</h3>
-    <label>Segment Name</label>
-    <input type="text" id="customSegmentName" placeholder="My Watchlist" />
-    <label>Product</label>
-    <select id="customSegmentProduct">
-      <option value="IPB">IPB</option>
-      <option value="ESP">ESP</option>
-      <option value="iBooster">iBooster</option>
-    </select>
-    <label>Competitors</label>
-    <div class="chips" id="customSegmentCompetitors"></div>
-    <label>Tech Params</label>
-    <div class="chips" id="customSegmentTech"></div>
-    <div class="segment-actions">
-      <button type="button" class="primary" id="saveSegment">⭐ Save Segment</button>
-      <button type="button" class="ghost" id="useSegment">Use Now</button>
-    </div>
-  `;
-  container.appendChild(custom);
+  const customGroup = document.createElement('div');
+  customGroup.className = 'segment-group custom-segment';
+  const customHeader = document.createElement('button');
+  customHeader.type = 'button';
+  customHeader.className = 'collapsible-header';
+  customHeader.innerHTML = `<span>Create Custom Segment</span><span class="chevron" aria-hidden="true">▸</span>`;
+  customHeader.setAttribute('aria-expanded', String(state.customSegmentOpen));
+  customHeader.addEventListener('click', () => {
+    state.customSegmentOpen = !state.customSegmentOpen;
+    renderExploreStep1();
+  });
+  customGroup.appendChild(customHeader);
+  const customBody = document.createElement('div');
+  customBody.className = 'collapsible-body custom-segment-body';
 
-  const customState = {
-    competitors: new Set(),
-    tech: new Set()
-  };
+  const nameLabel = document.createElement('label');
+  nameLabel.textContent = 'Segment Name';
+  const nameInput = document.createElement('input');
+  nameInput.type = 'text';
+  nameInput.id = 'customSegmentName';
+  nameInput.placeholder = 'My Watchlist';
+  const grid = document.createElement('div');
+  grid.className = 'custom-segment-grid';
 
-  const competitorWrap = custom.querySelector('#customSegmentCompetitors');
+  const productGroup = document.createElement('div');
+  productGroup.className = 'custom-field';
+  productGroup.innerHTML = '<span>产品</span>';
+  const productSelect = document.createElement('select');
+  productSelect.id = 'customSegmentProduct';
+  ['IPB', 'ESP', 'iBooster'].forEach((prod) => {
+    const option = document.createElement('option');
+    option.value = prod;
+    option.textContent = prod;
+    productSelect.appendChild(option);
+  });
+  productGroup.appendChild(productSelect);
+
+  const competitorGroup = document.createElement('div');
+  competitorGroup.className = 'custom-field';
+  competitorGroup.innerHTML = '<span>对手</span>';
+  const competitorWrap = document.createElement('div');
+  competitorWrap.className = 'chips';
   ['Bosch', 'Conti', 'BTL', 'ZF'].forEach((comp) => {
     const chip = document.createElement('div');
     chip.className = 'chip';
     chip.textContent = comp;
     chip.addEventListener('click', () => {
-      if (customState.competitors.has(comp)) {
-        customState.competitors.delete(comp);
+      if (chip.classList.contains('active')) {
         chip.classList.remove('active');
       } else {
-        customState.competitors.add(comp);
         chip.classList.add('active');
       }
     });
     competitorWrap.appendChild(chip);
   });
+  competitorGroup.appendChild(competitorWrap);
 
-  const techWrap = custom.querySelector('#customSegmentTech');
-  ['RoPP41', 'APB-Mi', 'iTPMs', 'WOP'].forEach((tech) => {
+  const techGroup = document.createElement('div');
+  techGroup.className = 'custom-field span-2';
+  techGroup.innerHTML = '<span>技术参数</span>';
+  const techWrap = document.createElement('div');
+  techWrap.className = 'chips';
+  ['RoPP41', 'APB-Mi', 'iTPMs', 'WOP', 'RSV'].forEach((tech) => {
     const chip = document.createElement('div');
     chip.className = 'chip';
     chip.textContent = tech;
     chip.addEventListener('click', () => {
-      if (customState.tech.has(tech)) {
-        customState.tech.delete(tech);
-        chip.classList.remove('active');
-      } else {
-        customState.tech.add(tech);
-        chip.classList.add('active');
-      }
+      chip.classList.toggle('active');
     });
     techWrap.appendChild(chip);
   });
+  techGroup.appendChild(techWrap);
 
-  const popular = document.createElement('div');
-  popular.className = 'filter-group';
-  popular.innerHTML = '<h3>Top 10 Popular Segments</h3>';
+  grid.append(productGroup, competitorGroup, techGroup);
+
+  const actionBar = document.createElement('div');
+  actionBar.className = 'segment-actions';
+  const saveBtn = document.createElement('button');
+  saveBtn.type = 'button';
+  saveBtn.className = 'primary';
+  saveBtn.textContent = '⭐ Save Segment';
+  const useBtn = document.createElement('button');
+  useBtn.type = 'button';
+  useBtn.className = 'ghost';
+  useBtn.textContent = 'Use Now';
+  actionBar.append(saveBtn, useBtn);
+
+  customBody.append(nameLabel, nameInput, grid, actionBar);
+  customGroup.appendChild(customBody);
+  container.appendChild(customGroup);
+
+  const popularGroup = document.createElement('div');
+  popularGroup.className = 'segment-group popular-segments';
+  const popularHeader = document.createElement('h4');
+  popularHeader.textContent = 'Top 10 Popular Segments';
+  popularGroup.appendChild(popularHeader);
   segmentConfig.popular.forEach((item) => {
     const row = document.createElement('div');
-    row.className = 'leaderboard-row';
+    row.className = 'popular-row';
+    row.dataset.popular = item.name;
     row.innerHTML = `<span>${item.name}</span><span>Score ${item.score}</span>`;
-    popular.appendChild(row);
+    if (state.activePopularSegment === item.name) {
+      row.classList.add('active');
+    }
+    if (state.flashSegmentName === item.name) {
+      row.classList.add('flash');
+      setTimeout(() => {
+        row.classList.remove('flash');
+        if (state.flashSegmentName === item.name) {
+          state.flashSegmentName = null;
+        }
+      }, 320);
+    }
+    row.addEventListener('click', () => {
+      state.flashSegmentName = item.name;
+      showToast(`🔍 Segment "${item.name}" loaded`);
+      activateExploreSegment(
+        {
+          id: `popular-${item.name}`,
+          name: item.name,
+          summary: '热门 Segment',
+          filter: item.filter
+        },
+        { popularName: item.name }
+      );
+    });
+    popularGroup.appendChild(row);
   });
-  container.appendChild(popular);
+  container.appendChild(popularGroup);
 
   step1.appendChild(container);
 
   const getCustomValues = () => {
-    const product = custom.querySelector('#customSegmentProduct').value;
-    const competitors = Array.from(customState.competitors);
-    const tech = Array.from(customState.tech);
-    const name = custom.querySelector('#customSegmentName').value || 'Untitled Segment';
-    return { product, competitors, tech, name };
+    const competitors = Array.from(competitorWrap.querySelectorAll('.chip.active')).map((chip) => chip.textContent);
+    const tech = Array.from(techWrap.querySelectorAll('.chip.active')).map((chip) => chip.textContent);
+    const name = nameInput.value || 'Untitled Segment';
+    return { product: productSelect.value, competitors, tech, name };
   };
 
-  custom.querySelector('#saveSegment').addEventListener('click', () => {
-    const values = getCustomValues();
-    segmentConfig.mySegments.unshift({
+  const persistSegment = (values, toastMessage) => {
+    const segment = {
       id: `segment-${Date.now()}`,
       name: values.name,
       summary: '新增 +0 ｜ 新低 0',
       filter: { product: values.product, competitors: values.competitors, tech: values.tech }
-    });
+    };
+    segmentConfig.mySegments.unshift(segment);
+    showToast(toastMessage);
+    state.segmentGroupOpen.mine = true;
     renderApp();
+  };
+
+  saveBtn.addEventListener('click', () => {
+    const values = getCustomValues();
+    persistSegment(values, '💾 Saved to My Segments');
   });
 
-  custom.querySelector('#useSegment').addEventListener('click', () => {
+  useBtn.addEventListener('click', () => {
     const values = getCustomValues();
     const segment = {
       id: `custom-${Date.now()}`,
@@ -1039,16 +1311,13 @@ function renderExploreStep1() {
       summary: '自定义筛选',
       filter: { product: values.product, competitors: values.competitors, tech: values.tech }
     };
-    state.exploreSegment = segment;
-    state.filters = {
-      time: '6m',
-      product: values.product,
-      competitors: values.competitors,
-      tech: values.tech,
-      more: { customer: null, volume: null, terms: null }
-    };
-    state.mode = 'explore';
-    renderApp();
+    showToast(`🔍 Segment "${segment.name}" loaded`);
+    activateExploreSegment(segment);
+  });
+
+  requestAnimationFrame(() => {
+    customBody.style.maxHeight = state.customSegmentOpen ? `${customBody.scrollHeight}px` : '0px';
+    customGroup.classList.toggle('expanded', state.customSegmentOpen);
   });
 }
 
@@ -1077,10 +1346,70 @@ function getExploreCases() {
     .filter(
       (item) =>
         item.leadMonth === state.exploreMonth &&
-        matchesSegment(item, state.exploreSegment?.filter) &&
+        matchesSegment(item, getActiveExploreFilter()) &&
         !state.hidden.has(item.id)
     )
     .sort((a, b) => (a.leadDate < b.leadDate ? 1 : -1));
+}
+
+function shiftMonthString(month, delta) {
+  const date = parseMonth(month);
+  date.setMonth(date.getMonth() + delta);
+  const y = date.getFullYear();
+  const m = `${date.getMonth() + 1}`.padStart(2, '0');
+  const candidate = `${y}-${m}`;
+  return segmentConfig.months.includes(candidate) ? candidate : null;
+}
+
+function getQuarterMonths(month) {
+  const date = parseMonth(month);
+  const quarterStart = date.getMonth() - (date.getMonth() % 3);
+  const months = [];
+  for (let i = 0; i < 3; i++) {
+    const temp = new Date(date);
+    temp.setMonth(quarterStart + i);
+    const y = temp.getFullYear();
+    const m = `${temp.getMonth() + 1}`.padStart(2, '0');
+    const candidate = `${y}-${m}`;
+    if (segmentConfig.months.includes(candidate)) {
+      months.push(candidate);
+    }
+  }
+  return months;
+}
+
+function aggregateCasesBySubmitter(months, segmentFilter) {
+  const counts = new Map();
+  caseDataset.forEach((item) => {
+    if (!months.includes(item.leadMonth)) return;
+    if (state.hidden.has(item.id)) return;
+    if (!matchesSegment(item, segmentFilter)) return;
+    counts.set(item.submitter, (counts.get(item.submitter) || 0) + 1);
+  });
+  return counts;
+}
+
+function computeLeaderboard(scope) {
+  const segmentFilter = getActiveExploreFilter();
+  const currentMonths = scope === 'monthly' ? [state.exploreMonth] : getQuarterMonths(state.exploreMonth);
+  const previousAnchor = scope === 'monthly' ? shiftMonthString(state.exploreMonth, -1) : shiftMonthString(state.exploreMonth, -3);
+  const previousMonths = previousAnchor ? (scope === 'monthly' ? [previousAnchor] : getQuarterMonths(previousAnchor)) : [];
+
+  const currentCounts = aggregateCasesBySubmitter(currentMonths, segmentFilter);
+  const previousCounts = previousMonths.length ? aggregateCasesBySubmitter(previousMonths, segmentFilter) : new Map();
+
+  const sorted = [...currentCounts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 10);
+  if (!sorted.length) {
+    return segmentConfig.leaderboard[scope].map((item) => ({ ...item }));
+  }
+
+  return sorted.map(([user, count], index) => {
+    const prev = previousCounts.get(user) || 0;
+    let trend = '→';
+    if (count > prev) trend = `↑${count - prev}`;
+    if (count < prev) trend = `↓${prev - count}`;
+    return { rank: index + 1, user, count, trend };
+  });
 }
 
 function renderExploreStep2() {
@@ -1092,6 +1421,8 @@ function renderExploreStep2() {
   `;
   const container = document.createElement('div');
   container.className = 'incremental';
+  const tagsRow = createTagRow(buildExploreTags());
+  container.appendChild(tagsRow);
   const kpis = document.createElement('div');
   kpis.className = 'kpi-summary';
   const cases = getExploreCases();
@@ -1108,27 +1439,29 @@ function renderExploreStep2() {
   }
 
   const tiers = [
-    { key: 'L3', title: '🟥 L3 – New record low for product category', color: 'l3', defaultOpen: true },
-    { key: 'L2', title: '🟨 L2 – New record low vs competitor', color: 'l2', defaultOpen: true },
-    { key: 'L1', title: '🩶 L1 – Normal new additions', color: 'l1', defaultOpen: false }
+    { key: 'L3', title: '🟥 L3 – New record low for product category', color: 'l3' },
+    { key: 'L2', title: '🟨 L2 – New record low vs competitor', color: 'l2' },
+    { key: 'L1', title: '🩶 L1 – Normal new additions', color: 'l1' }
   ];
 
   tiers.forEach((tier) => {
     const section = document.createElement('div');
-    section.className = 'incremental-section';
-    section.style.background = `var(--${tier.color === 'l1' ? 'gray' : tier.color === 'l2' ? 'yellow' : 'red'})`;
-    const header = document.createElement('header');
-    header.innerHTML = `<span>${tier.title}</span><span>${state.exploreExpanded[tier.key] ? '−' : '+'}</span>`;
+    section.className = `incremental-section tier-${tier.key.toLowerCase()}`;
+    const header = document.createElement('button');
+    header.type = 'button';
+    header.className = 'collapsible-header';
+    const expanded = state.exploreExpanded[tier.key];
+    header.setAttribute('aria-expanded', String(expanded));
+    header.innerHTML = `<span>${tier.title}</span><span class="chevron" aria-hidden="true">▸</span>`;
     header.addEventListener('click', () => {
       state.exploreExpanded[tier.key] = !state.exploreExpanded[tier.key];
-      renderApp();
+      renderExploreStep2();
+      renderDetailCards(getExploreCases());
     });
     section.appendChild(header);
 
     const list = document.createElement('ul');
-    if (!state.exploreExpanded[tier.key]) {
-      list.style.display = 'none';
-    }
+    list.className = 'collapsible-body incremental-list';
     cases.filter((c) => c.tier === tier.key).forEach((item) => {
       const li = document.createElement('li');
       li.innerHTML = `<h5>${item.sopPrice} CNY <span class="tag ${tier.key.toLowerCase()}">${tier.key}</span></h5>
@@ -1139,6 +1472,11 @@ function renderExploreStep2() {
     });
     section.appendChild(list);
     container.appendChild(section);
+    requestAnimationFrame(() => {
+      list.style.maxHeight = expanded ? `${list.scrollHeight}px` : '0px';
+      header.setAttribute('aria-expanded', String(expanded));
+      section.classList.toggle('expanded', expanded);
+    });
   });
 
   const leaderboardContainer = document.createElement('div');
@@ -1173,7 +1511,7 @@ function renderExploreStep2() {
 
     const lbList = document.createElement('div');
     lbList.className = 'leaderboard-list';
-    segmentConfig.leaderboard[state.exploreSnapshot].forEach((item) => {
+    computeLeaderboard(state.exploreSnapshot).forEach((item) => {
       const row = document.createElement('div');
       row.className = 'leaderboard-row';
       row.innerHTML = `<span>#${item.rank} ${item.user}</span><span>${item.count} cases ｜ ${item.trend}</span>`;
@@ -1207,6 +1545,7 @@ function renderDetailCards(cases) {
   resetButton.addEventListener('click', () => {
     state.pinned.clear();
     state.hidden.clear();
+    state.priceInfoCollapsed.clear();
     renderApp();
   });
   resetBar.appendChild(resetButton);
@@ -1217,6 +1556,7 @@ function renderDetailCards(cases) {
     const card = document.createElement('div');
     card.className = 'case-card';
     card.id = `card-${item.id}`;
+    const priceCollapsed = state.priceInfoCollapsed.has(item.id);
     card.innerHTML = `
       <h3>${item.sopPrice} CNY</h3>
       <h4>${item.client} – ${item.project} – ${item.product} ｜ SOP ${item.sopYear}</h4>
@@ -1233,13 +1573,18 @@ function renderDetailCards(cases) {
           <dt>Submitter</dt><dd>${item.submitter}</dd>
         </dl>
       </div>
-      <div class="card-section">
-        <strong>2. Price Info</strong>
-        <dl>
-          ${Object.keys(item.prices).map((year) => `<dt>${year}</dt><dd>${item.prices[year]} CNY</dd>`).join('')}
-          <dt>PCR Rate</dt><dd>${item.pcrRate ?? '-'}%</dd>
-          <dt>PCR Years</dt><dd>${item.pcrYears ?? '-'}</dd>
-        </dl>
+      <div class="card-section price-info ${priceCollapsed ? 'collapsed' : 'expanded'}">
+        <button class="collapse-toggle" type="button" data-price-toggle>
+          <span>2. Price Info</span>
+          <span class="chevron" aria-hidden="true">▸</span>
+        </button>
+        <div class="price-info-body">
+          <dl>
+            ${Object.keys(item.prices).map((year) => `<dt>${year}</dt><dd>${item.prices[year]} CNY</dd>`).join('')}
+            <dt>PCR Rate</dt><dd>${item.pcrRate ?? '-'}%</dd>
+            <dt>PCR Years</dt><dd>${item.pcrYears ?? '-'}</dd>
+          </dl>
+        </div>
       </div>
       <div class="card-section">
         <details>
@@ -1267,6 +1612,23 @@ function renderDetailCards(cases) {
       state.hidden.add(item.id);
       renderApp();
     });
+    const priceSection = card.querySelector('.price-info');
+    const body = priceSection.querySelector('.price-info-body');
+    requestAnimationFrame(() => {
+      body.style.maxHeight = priceSection.classList.contains('collapsed') ? '0px' : `${body.scrollHeight}px`;
+    });
+    priceSection.querySelector('[data-price-toggle]').addEventListener('click', () => {
+      const willCollapse = !priceSection.classList.contains('collapsed');
+      priceSection.classList.toggle('collapsed', willCollapse);
+      priceSection.classList.toggle('expanded', !willCollapse);
+      if (willCollapse) {
+        state.priceInfoCollapsed.add(item.id);
+        body.style.maxHeight = '0px';
+      } else {
+        state.priceInfoCollapsed.delete(item.id);
+        body.style.maxHeight = `${body.scrollHeight}px`;
+      }
+    });
     container.appendChild(card);
   });
   panel.appendChild(container);
@@ -1276,9 +1638,10 @@ function renderDetailCards(cases) {
 function highlightCase(caseId) {
   const card = document.getElementById(`card-${caseId}`);
   if (!card) return;
-  card.classList.add('highlight');
+  card.classList.add('highlight', 'glow');
   card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  setTimeout(() => card.classList.remove('highlight'), 1500);
+  setTimeout(() => card.classList.remove('glow'), 1000);
+  setTimeout(() => card.classList.remove('highlight'), 1200);
 }
 
 // -----------------------------
@@ -1289,6 +1652,27 @@ const newLeadModal = document.getElementById('newLeadModal');
 const leadForm = document.getElementById('leadForm');
 const toast = document.getElementById('toast');
 const hideHintCheckbox = document.getElementById('hideHintCheckbox');
+const confirmModal = document.getElementById('confirmModal');
+const confirmTitleEl = document.getElementById('confirmTitle');
+const confirmMessageEl = document.getElementById('confirmMessage');
+const confirmOkBtn = confirmModal.querySelector('[data-confirm="ok"]');
+const confirmCancelBtn = confirmModal.querySelector('[data-confirm="cancel"]');
+
+let confirmState = null;
+
+function openConfirm({ message, title = 'Confirm', confirmLabel = 'Confirm', cancelLabel = 'Cancel', onConfirm }) {
+  confirmTitleEl.textContent = title;
+  confirmMessageEl.textContent = message;
+  confirmOkBtn.textContent = confirmLabel;
+  confirmCancelBtn.textContent = cancelLabel;
+  confirmModal.classList.remove('hidden');
+  confirmState = { onConfirm };
+}
+
+function closeConfirm() {
+  confirmModal.classList.add('hidden');
+  confirmState = null;
+}
 
 hideHintCheckbox.addEventListener('change', (e) => {
   state.dontShowHint = e.target.checked;
@@ -1309,6 +1693,22 @@ newLeadModal.addEventListener('click', (e) => {
   if (e.target.dataset.close !== undefined || e.target === newLeadModal) {
     closeLeadModal();
   }
+});
+
+confirmModal.addEventListener('click', (e) => {
+  if (e.target === confirmModal) {
+    closeConfirm();
+  }
+});
+
+confirmCancelBtn.addEventListener('click', () => {
+  closeConfirm();
+});
+
+confirmOkBtn.addEventListener('click', () => {
+  const callback = confirmState?.onConfirm;
+  closeConfirm();
+  if (callback) callback();
 });
 
 function closeLeadModal() {
@@ -1348,7 +1748,7 @@ leadForm.addEventListener('submit', (e) => {
   }
   caseDataset.unshift(newCase);
   closeLeadModal();
-  showToast();
+  showToast('✅ New price lead saved successfully!');
   renderApp();
 });
 
@@ -1368,8 +1768,8 @@ function getContextDefaults() {
   };
 }
 
-function showToast() {
-  toast.textContent = '✅ New price lead saved successfully!';
+function showToast(message) {
+  toast.textContent = message;
   toast.classList.add('show');
   toast.classList.remove('hidden');
   setTimeout(() => {

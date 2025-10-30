@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>iCoS Commercial v3.5 Demo</title>
+  <title>iCoS Commercial v3.6 Demo</title>
   <link rel="stylesheet" href="styles.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,7 +13,7 @@
 <body>
   <div id="app" class="app-container">
     <header class="top-bar">
-      <span class="app-title">iCoS Commercial v3.5</span>
+      <span class="app-title">iCoS Commercial v3.6</span>
       <div class="mode-switch-bar">
         <button class="mode-tab active" data-mode="focus" aria-pressed="true">🔍 Find Prices</button>
         <button class="mode-tab" data-mode="explore" aria-pressed="false">📈 See What's New</button>
@@ -118,7 +118,18 @@
     </div>
   </div>
 
-  <div class="toast hidden" id="toast">✅ New price lead saved successfully!</div>
+  <div class="modal-overlay hidden" id="confirmModal">
+    <div class="modal confirm-modal">
+      <h3 id="confirmTitle">Confirm</h3>
+      <p id="confirmMessage"></p>
+      <div class="modal-actions">
+        <button type="button" data-confirm="cancel">Cancel</button>
+        <button type="button" class="danger" data-confirm="ok">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast hidden" id="toast"></div>
 
   <script type="module" src="app.js"></script>
 </body>
