@@ -847,6 +847,9 @@ function renderFocusStep2() {
   chartHolder.className = 'chart-container';
   chartHolder.innerHTML = '<canvas id="priceChart"></canvas>';
   container.appendChild(chartHolder);
+  const minTableContainer = document.createElement('div');
+  minTableContainer.className = 'min-price-table-container hidden';
+  container.appendChild(minTableContainer);
   const legendNote = document.createElement('div');
   legendNote.className = 'legend-note';
   legendNote.textContent = 'Click lines or legend items to focus and open details. Latest 10 leads shown when dataset exceeds limit.';
@@ -861,6 +864,8 @@ function renderFocusStep2() {
 
   if (!latestCases.length) {
     chartHolder.innerHTML = '<div class="mode-hint">No cases found for the current filters.</div>';
+    minTableContainer.innerHTML = '';
+    minTableContainer.classList.add('hidden');
     if (state.chartInstance) {
       state.chartInstance.destroy();
       state.chartInstance = null;
@@ -915,6 +920,7 @@ function renderFocusStep2() {
             defaultLegendClick.call(legend.chart, evt, legendItem, legend);
             const dataset = legend.chart.data.datasets[legendItem.datasetIndex];
             highlightCase(dataset.caseId);
+            updateMinPriceTable(state.chartInstance, minTableContainer, state.mode === 'focus');
           },
           onHover: (evt, legendItem, legend) => {
             if (evt?.native?.target) {
@@ -956,6 +962,7 @@ function renderFocusStep2() {
     }
   });
   applyChartFocus(state.chartInstance, null);
+  updateMinPriceTable(state.chartInstance, minTableContainer, state.mode === 'focus');
 }
 
 const chartPalette = ['#0B5CFF', '#3B82F6', '#6366F1', '#F59E0B', '#EF4444', '#10B981', '#14B8A6', '#8B5CF6', '#EC4899', '#F97316'];
@@ -978,6 +985,108 @@ function applyChartFocus(chart, focusIndex) {
     dataset.borderWidth = isActive && focusIndex !== null ? 3 : 2;
   });
   chart.update('none');
+}
+
+function updateMinPriceTable(chart, container, isFindPricesMode) {
+  if (!container) return;
+  if (!isFindPricesMode || !chart) {
+    container.innerHTML = '';
+    container.classList.add('hidden');
+    container.style.opacity = 1;
+    return;
+  }
+
+  const allYears = new Set();
+  chart.data.datasets.forEach((dataset) => {
+    dataset.data.forEach((point, index) => {
+      if (!point) return;
+      const yearValue = typeof point.x === 'number' ? point.x : Array.isArray(chart.data.labels) ? chart.data.labels[index] : null;
+      if (yearValue !== null && yearValue !== undefined) {
+        allYears.add(Math.round(yearValue));
+      }
+    });
+  });
+
+  if (!allYears.size) {
+    container.innerHTML = '';
+    container.classList.add('hidden');
+    container.style.opacity = 1;
+    return;
+  }
+
+  const sortedYears = Array.from(allYears).sort((a, b) => a - b);
+  const minValues = {};
+  const casesByYear = {};
+  sortedYears.forEach((year) => {
+    minValues[year] = Infinity;
+    casesByYear[year] = new Set();
+  });
+
+  chart.data.datasets.forEach((dataset) => {
+    if (dataset.hidden) return;
+    dataset.data.forEach((point) => {
+      if (!point) return;
+      const year = typeof point.x === 'number' ? Math.round(point.x) : null;
+      if (year === null) return;
+      const value = typeof point.y === 'number' ? point.y : null;
+      if (value === null || Number.isNaN(value)) return;
+      if (value < minValues[year]) {
+        minValues[year] = value;
+        casesByYear[year] = new Set([dataset.label]);
+      } else if (value === minValues[year]) {
+        casesByYear[year].add(dataset.label);
+      }
+    });
+  });
+
+  const table = document.createElement('table');
+  table.className = 'min-price-table';
+
+  const headerRow = document.createElement('tr');
+  const headerLabel = document.createElement('th');
+  headerLabel.textContent = 'Year';
+  headerRow.appendChild(headerLabel);
+  sortedYears.forEach((year) => {
+    const th = document.createElement('th');
+    th.textContent = year;
+    headerRow.appendChild(th);
+  });
+  table.appendChild(headerRow);
+
+  const dataRow = document.createElement('tr');
+  const dataLabel = document.createElement('th');
+  dataLabel.textContent = 'Min Price (CNY)';
+  dataRow.appendChild(dataLabel);
+
+  sortedYears.forEach((year) => {
+    const cell = document.createElement('td');
+    const minValue = minValues[year];
+    if (minValue === Infinity) {
+      cell.classList.add('empty');
+      cell.textContent = '—';
+    } else {
+      const rounded = Math.round(minValue);
+      cell.textContent = rounded;
+      const cases = Array.from(casesByYear[year]);
+      if (cases.length) {
+        const tooltipLines = [`Year ${year}: Min ${rounded} CNY`, 'Cases:'];
+        cases.forEach((c) => tooltipLines.push(c));
+        cell.title = tooltipLines.join('\n');
+      } else {
+        cell.title = `Year ${year}: Min ${rounded} CNY`;
+      }
+    }
+    dataRow.appendChild(cell);
+  });
+  table.appendChild(dataRow);
+
+  container.innerHTML = '';
+  container.appendChild(table);
+  container.classList.remove('hidden');
+  container.style.opacity = 0;
+  requestAnimationFrame(() => {
+    container.style.opacity = 1;
+  });
 }
 
 function showChartHint(total) {

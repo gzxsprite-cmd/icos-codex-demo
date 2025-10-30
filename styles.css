@@ -375,6 +375,41 @@ body {
   height: auto !important;
 }
 
+.min-price-table-container {
+  margin-top: 12px;
+  width: 100%;
+  transition: opacity 0.3s ease;
+}
+
+.min-price-table-container.hidden {
+  display: none !important;
+}
+
+.min-price-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+  font-size: 13px;
+}
+
+.min-price-table th,
+.min-price-table td {
+  border: 1px solid #eee;
+  padding: 6px 8px;
+  min-width: 60px;
+}
+
+.min-price-table th {
+  background: #f9fafb;
+  color: #555;
+  font-weight: 600;
+}
+
+.min-price-table td.empty {
+  color: #aaa;
+  font-style: italic;
+}
+
 .legend-note {
   font-size: 0.8rem;
   color: var(--muted);
