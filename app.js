@@ -382,42 +382,54 @@ const caseDataset = [
   }
 ];
 
-const circleConfig = {
+const segmentConfig = {
   months: ['2024-12', '2025-01', '2025-02', '2025-03', '2025-04', '2025-05', '2025-06', '2025-07', '2025-08', '2025-09'],
   predefined: [
     {
-      id: 'circle-ev',
-      name: 'EV Flagships',
+      id: 'segment-ipb',
+      name: '产品：IPB',
       summary: '新增 +6 ｜ 新低 2',
+      filter: { product: 'IPB', competitors: [], tech: [] }
+    },
+    {
+      id: 'segment-ipb-conti',
+      name: '产品：IPB，对手：Conti',
+      summary: '新增 +4 ｜ 新低 1',
+      filter: { product: 'IPB', competitors: ['Conti'], tech: [] }
+    },
+    {
+      id: 'segment-esp-zf',
+      name: '产品：ESP，对手：ZF',
+      summary: '新增 +3 ｜ 新低 1',
+      filter: { product: 'ESP', competitors: ['ZF'], tech: [] }
+    }
+  ],
+  mySegments: [
+    {
+      id: 'segment-my-1',
+      name: 'IPB Conti RoPP41',
+      summary: '新增 +2 ｜ 新低 1',
       filter: { product: 'IPB', competitors: ['Conti'], tech: ['RoPP41'] }
     },
     {
-      id: 'circle-suv',
-      name: 'SUV Program Tracker',
-      summary: '新增 +4 ｜ 新低 1',
-      filter: { product: 'ESP', competitors: ['Bosch', 'ZF'], tech: ['APB-Mi'] }
+      id: 'segment-my-2',
+      name: 'ESP ZF RSV',
+      summary: '新增 +1 ｜ 新低 0',
+      filter: { product: 'ESP', competitors: ['ZF'], tech: ['APB-Mi'] }
     },
     {
-      id: 'circle-premium',
-      name: 'Premium Alliances',
-      summary: '新增 +3 ｜ 新低 0',
-      filter: { product: 'iBooster', competitors: ['Conti', 'ZF'], tech: ['iTPMs'] }
-    }
-  ],
-  myCircles: [
-    {
-      id: 'circle-my-1',
-      name: 'Conti RoPP watch',
-      summary: '新增 +5 ｜ 新低 2',
-      filter: { product: 'IPB', competitors: ['Conti'], tech: ['RoPP41', 'iTPMs'] }
+      id: 'segment-my-3',
+      name: 'ESP Continental iTPMs',
+      summary: '新增 +1 ｜ 新低 0',
+      filter: { product: 'ESP', competitors: ['Conti'], tech: ['iTPMs'] }
     }
   ],
   popular: [
-    { name: 'Top EV Bundles', score: 98 },
-    { name: 'Chassis Mix Deals', score: 91 },
-    { name: '2025 SOP Hotlist', score: 89 },
-    { name: 'Competitor Low Watch', score: 87 },
-    { name: 'New Energy Vans', score: 83 }
+    { name: 'IPB Conti', score: 95 },
+    { name: 'ESP Price Hunt', score: 90 },
+    { name: 'IPB vs Market', score: 88 },
+    { name: 'IPB ZF RSV', score: 86 },
+    { name: 'ESP Global Watch', score: 84 }
   ],
   leaderboard: {
     monthly: [
@@ -453,8 +465,9 @@ const state = {
   chartInstance: null,
   exploreMonth: '2025-09',
   exploreSnapshot: 'monthly',
-  exploreCircle: null,
-  exploreExpanded: { L3: true, L2: true, L1: false }
+  exploreSegment: null,
+  exploreExpanded: { L3: true, L2: true, L1: false },
+  leaderboardExpanded: false
 };
 
 // Utility helpers
@@ -503,7 +516,8 @@ function renderApp() {
   });
 
   if (state.mode === 'focus') {
-    state.exploreCircle = null;
+    state.exploreSegment = null;
+    state.leaderboardExpanded = false;
     renderFocusStep1();
     renderFocusStep2();
     renderDetailCards(getFocusVisibleCases());
@@ -676,7 +690,7 @@ function renderFocusStep1() {
 
   // Action buttons
   const actions = document.createElement('div');
-  actions.className = 'filter-actions';
+  actions.className = 'step1-buttons';
   const filterBtn = document.createElement('button');
   filterBtn.textContent = 'Filter';
   filterBtn.className = 'primary';
@@ -839,12 +853,12 @@ function showChartHint(total) {
 function renderExploreStep1() {
   step1.innerHTML = `
     <div class="section-title">
-      <h2>Step 1 · Circles</h2>
-      <span class="mode-hint">Pick a circle or snapshot to explore fresh leads.</span>
+      <h2>Step 1 · Segments</h2>
+      <span class="mode-hint">Pick a segment or snapshot to explore fresh leads.</span>
     </div>
   `;
   const container = document.createElement('div');
-  container.className = 'circle-section';
+  container.className = 'segment-section';
 
   const monthNav = document.createElement('div');
   monthNav.className = 'month-nav';
@@ -861,7 +875,7 @@ function renderExploreStep1() {
   const monthLabel = document.createElement('div');
   monthLabel.innerHTML = `<strong>${formatMonth(state.exploreMonth)}</strong>`;
   const select = document.createElement('select');
-  circleConfig.months.forEach((month) => {
+  segmentConfig.months.forEach((month) => {
     const option = document.createElement('option');
     option.value = month;
     option.textContent = formatMonth(month);
@@ -875,69 +889,120 @@ function renderExploreStep1() {
   monthNav.append(prevBtn, monthLabel, nextBtn, select);
   container.appendChild(monthNav);
 
-  const addCircleList = (title, circles) => {
+  const renderSegmentList = (title, segments) => {
     const header = document.createElement('h4');
     header.textContent = title;
     container.appendChild(header);
-    circles.forEach((circle) => {
+    if (!segments.length) {
+      const empty = document.createElement('div');
+      empty.className = 'mode-hint';
+      empty.textContent = title === 'My Segments' ? 'No saved segments yet.' : 'No segments available.';
+      container.appendChild(empty);
+      return;
+    }
+    segments.forEach((segment) => {
       const row = document.createElement('div');
-      row.className = 'circle-row';
-      if (state.exploreCircle?.id === circle.id) {
+      row.className = 'segment-row';
+      if (state.exploreSegment?.id === segment.id) {
         row.classList.add('active');
       }
       row.innerHTML = `
-        <strong>${circle.name}</strong>
-        <span>${circle.summary}</span>
+        <strong>${segment.name}</strong>
+        <span>${segment.summary}</span>
       `;
       const btn = document.createElement('button');
+      btn.type = 'button';
       btn.textContent = '查找';
       btn.addEventListener('click', () => {
-        state.exploreCircle = circle;
+        state.exploreSegment = segment;
         state.filters = {
           time: '6m',
-          product: circle.filter.product,
-          competitors: circle.filter.competitors ?? [],
-          tech: circle.filter.tech ?? [],
+          product: segment.filter.product,
+          competitors: segment.filter.competitors ?? [],
+          tech: segment.filter.tech ?? [],
           more: { customer: null, volume: null, terms: null }
         };
         state.mode = 'explore';
         renderApp();
       });
       row.appendChild(btn);
+      row.addEventListener('click', (event) => {
+        if (event.target.tagName.toLowerCase() === 'button') return;
+        btn.click();
+      });
       container.appendChild(row);
     });
   };
 
-  addCircleList('Predefined Circles', circleConfig.predefined);
-  addCircleList('My Circles', circleConfig.myCircles);
+  renderSegmentList('Predefined Segments', segmentConfig.predefined);
+  renderSegmentList('My Segments', segmentConfig.mySegments);
 
   const custom = document.createElement('div');
   custom.className = 'filter-group';
   custom.innerHTML = `
-    <h3>Create Custom Circle</h3>
-    <label>Circle Name</label>
-    <input type="text" id="customCircleName" placeholder="My Watchlist" />
+    <h3>Create Custom Segment</h3>
+    <label>Segment Name</label>
+    <input type="text" id="customSegmentName" placeholder="My Watchlist" />
     <label>Product</label>
-    <select id="customProduct">
+    <select id="customSegmentProduct">
       <option value="IPB">IPB</option>
       <option value="ESP">ESP</option>
       <option value="iBooster">iBooster</option>
     </select>
-    <label>Competitors (comma separated)</label>
-    <input type="text" id="customCompetitors" placeholder="Conti, Bosch" />
-    <label>Tech Params (comma separated)</label>
-    <input type="text" id="customTech" placeholder="RoPP41, iTPMs" />
-    <div class="circle-actions">
-      <button class="primary" id="saveCircle">⭐ Save Circle</button>
-      <button class="ghost" id="useCircle">Use Now</button>
+    <label>Competitors</label>
+    <div class="chips" id="customSegmentCompetitors"></div>
+    <label>Tech Params</label>
+    <div class="chips" id="customSegmentTech"></div>
+    <div class="segment-actions">
+      <button type="button" class="primary" id="saveSegment">⭐ Save Segment</button>
+      <button type="button" class="ghost" id="useSegment">Use Now</button>
     </div>
   `;
   container.appendChild(custom);
 
+  const customState = {
+    competitors: new Set(),
+    tech: new Set()
+  };
+
+  const competitorWrap = custom.querySelector('#customSegmentCompetitors');
+  ['Bosch', 'Conti', 'BTL', 'ZF'].forEach((comp) => {
+    const chip = document.createElement('div');
+    chip.className = 'chip';
+    chip.textContent = comp;
+    chip.addEventListener('click', () => {
+      if (customState.competitors.has(comp)) {
+        customState.competitors.delete(comp);
+        chip.classList.remove('active');
+      } else {
+        customState.competitors.add(comp);
+        chip.classList.add('active');
+      }
+    });
+    competitorWrap.appendChild(chip);
+  });
+
+  const techWrap = custom.querySelector('#customSegmentTech');
+  ['RoPP41', 'APB-Mi', 'iTPMs', 'WOP'].forEach((tech) => {
+    const chip = document.createElement('div');
+    chip.className = 'chip';
+    chip.textContent = tech;
+    chip.addEventListener('click', () => {
+      if (customState.tech.has(tech)) {
+        customState.tech.delete(tech);
+        chip.classList.remove('active');
+      } else {
+        customState.tech.add(tech);
+        chip.classList.add('active');
+      }
+    });
+    techWrap.appendChild(chip);
+  });
+
   const popular = document.createElement('div');
   popular.className = 'filter-group';
-  popular.innerHTML = '<h3>Top 10 Popular Circles</h3>';
-  circleConfig.popular.forEach((item) => {
+  popular.innerHTML = '<h3>Top 10 Popular Segments</h3>';
+  segmentConfig.popular.forEach((item) => {
     const row = document.createElement('div');
     row.className = 'leaderboard-row';
     row.innerHTML = `<span>${item.name}</span><span>Score ${item.score}</span>`;
@@ -945,72 +1010,52 @@ function renderExploreStep1() {
   });
   container.appendChild(popular);
 
-  const leaderboard = document.createElement('div');
-  leaderboard.className = 'filter-group';
-  leaderboard.innerHTML = `
-    <div class="section-title">
-      <h3>Contribution Leaderboard</h3>
-      <div>
-        <button data-scope="monthly" class="mode-tab ${state.exploreSnapshot === 'monthly' ? 'active' : ''}">Monthly</button>
-        <button data-scope="quarterly" class="mode-tab ${state.exploreSnapshot === 'quarterly' ? 'active' : ''}">Quarterly</button>
-      </div>
-    </div>
-  `;
-  const lbList = document.createElement('div');
-  lbList.className = 'leaderboard';
-  circleConfig.leaderboard[state.exploreSnapshot].forEach((item) => {
-    const row = document.createElement('div');
-    row.className = 'leaderboard-row';
-    row.innerHTML = `<span>#${item.rank} ${item.user}</span><span>${item.count} cases ｜ ${item.trend}</span>`;
-    lbList.appendChild(row);
-  });
-  leaderboard.appendChild(lbList);
-  container.appendChild(leaderboard);
-
   step1.appendChild(container);
 
-  leaderboard.querySelectorAll('button[data-scope]').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      state.exploreSnapshot = btn.dataset.scope;
-      renderApp();
-    });
-  });
+  const getCustomValues = () => {
+    const product = custom.querySelector('#customSegmentProduct').value;
+    const competitors = Array.from(customState.competitors);
+    const tech = Array.from(customState.tech);
+    const name = custom.querySelector('#customSegmentName').value || 'Untitled Segment';
+    return { product, competitors, tech, name };
+  };
 
-  custom.querySelector('#saveCircle').addEventListener('click', () => {
-    const name = custom.querySelector('#customCircleName').value || 'Untitled Circle';
-    const product = custom.querySelector('#customProduct').value;
-    const competitors = custom.querySelector('#customCompetitors').value.split(',').map((c) => c.trim()).filter(Boolean);
-    const tech = custom.querySelector('#customTech').value.split(',').map((c) => c.trim()).filter(Boolean);
-    circleConfig.myCircles.unshift({
-      id: `circle-${Date.now()}`,
-      name,
+  custom.querySelector('#saveSegment').addEventListener('click', () => {
+    const values = getCustomValues();
+    segmentConfig.mySegments.unshift({
+      id: `segment-${Date.now()}`,
+      name: values.name,
       summary: '新增 +0 ｜ 新低 0',
-      filter: { product, competitors, tech }
+      filter: { product: values.product, competitors: values.competitors, tech: values.tech }
     });
     renderApp();
   });
 
-  custom.querySelector('#useCircle').addEventListener('click', () => {
-    const product = custom.querySelector('#customProduct').value;
-    const competitors = custom.querySelector('#customCompetitors').value.split(',').map((c) => c.trim()).filter(Boolean);
-    const tech = custom.querySelector('#customTech').value.split(',').map((c) => c.trim()).filter(Boolean);
-    const circle = {
+  custom.querySelector('#useSegment').addEventListener('click', () => {
+    const values = getCustomValues();
+    const segment = {
       id: `custom-${Date.now()}`,
-      name: custom.querySelector('#customCircleName').value || 'Custom Circle',
+      name: values.name,
       summary: '自定义筛选',
-      filter: { product, competitors, tech }
+      filter: { product: values.product, competitors: values.competitors, tech: values.tech }
     };
-    state.exploreCircle = circle;
-    state.filters = { time: '6m', product, competitors, tech, more: { customer: null, volume: null, terms: null } };
+    state.exploreSegment = segment;
+    state.filters = {
+      time: '6m',
+      product: values.product,
+      competitors: values.competitors,
+      tech: values.tech,
+      more: { customer: null, volume: null, terms: null }
+    };
     state.mode = 'explore';
     renderApp();
   });
 }
 
 function shiftMonth(delta) {
-  const idx = circleConfig.months.indexOf(state.exploreMonth);
-  const nextIdx = Math.min(Math.max(idx + delta, 0), circleConfig.months.length - 1);
-  state.exploreMonth = circleConfig.months[nextIdx];
+  const idx = segmentConfig.months.indexOf(state.exploreMonth);
+  const nextIdx = Math.min(Math.max(idx + delta, 0), segmentConfig.months.length - 1);
+  state.exploreMonth = segmentConfig.months[nextIdx];
   renderApp();
 }
 
@@ -1019,11 +1064,11 @@ function formatMonth(month) {
   return `${year}年${mo}月`;
 }
 
-function matchesCircle(item, circleFilter) {
-  if (!circleFilter) return true;
-  if (circleFilter.product && item.product !== circleFilter.product) return false;
-  if (circleFilter.competitors?.length && !circleFilter.competitors.includes(item.competitor)) return false;
-  if (circleFilter.tech?.length && !circleFilter.tech.some((tech) => item.tech.includes(tech))) return false;
+function matchesSegment(item, segmentFilter) {
+  if (!segmentFilter) return true;
+  if (segmentFilter.product && item.product !== segmentFilter.product) return false;
+  if (segmentFilter.competitors?.length && !segmentFilter.competitors.includes(item.competitor)) return false;
+  if (segmentFilter.tech?.length && !segmentFilter.tech.some((tech) => item.tech.includes(tech))) return false;
   return true;
 }
 
@@ -1032,7 +1077,7 @@ function getExploreCases() {
     .filter(
       (item) =>
         item.leadMonth === state.exploreMonth &&
-        matchesCircle(item, state.exploreCircle?.filter) &&
+        matchesSegment(item, state.exploreSegment?.filter) &&
         !state.hidden.has(item.id)
     )
     .sort((a, b) => (a.leadDate < b.leadDate ? 1 : -1));
@@ -1058,7 +1103,7 @@ function renderExploreStep2() {
   if (!cases.length) {
     const empty = document.createElement('p');
     empty.className = 'mode-hint';
-    empty.textContent = 'No cases found for the selected month and circle.';
+    empty.textContent = 'No cases found for the selected month and segment.';
     container.appendChild(empty);
   }
 
@@ -1095,6 +1140,50 @@ function renderExploreStep2() {
     section.appendChild(list);
     container.appendChild(section);
   });
+
+  const leaderboardContainer = document.createElement('div');
+  leaderboardContainer.className = 'leaderboard-container';
+  const toggle = document.createElement('button');
+  toggle.className = 'leaderboard-toggle';
+  toggle.type = 'button';
+  toggle.innerHTML = state.leaderboardExpanded ? '▾ 收起贡献榜' : '▸ 查看贡献榜';
+  toggle.addEventListener('click', () => {
+    state.leaderboardExpanded = !state.leaderboardExpanded;
+    renderApp();
+  });
+  leaderboardContainer.appendChild(toggle);
+
+  if (state.leaderboardExpanded) {
+    const panel = document.createElement('div');
+    panel.className = 'leaderboard-panel';
+    const scope = document.createElement('div');
+    scope.className = 'leaderboard-scope';
+    ['monthly', 'quarterly'].forEach((key) => {
+      const scopeBtn = document.createElement('button');
+      scopeBtn.textContent = key === 'monthly' ? 'Monthly' : 'Quarterly';
+      scopeBtn.type = 'button';
+      if (state.exploreSnapshot === key) scopeBtn.classList.add('active');
+      scopeBtn.addEventListener('click', () => {
+        state.exploreSnapshot = key;
+        renderApp();
+      });
+      scope.appendChild(scopeBtn);
+    });
+    panel.appendChild(scope);
+
+    const lbList = document.createElement('div');
+    lbList.className = 'leaderboard-list';
+    segmentConfig.leaderboard[state.exploreSnapshot].forEach((item) => {
+      const row = document.createElement('div');
+      row.className = 'leaderboard-row';
+      row.innerHTML = `<span>#${item.rank} ${item.user}</span><span>${item.count} cases ｜ ${item.trend}</span>`;
+      lbList.appendChild(row);
+    });
+    panel.appendChild(lbList);
+    leaderboardContainer.appendChild(panel);
+  }
+
+  container.appendChild(leaderboardContainer);
 
   step2.appendChild(container);
 }
@@ -1271,11 +1360,11 @@ function getContextDefaults() {
       tech: state.filters.tech.join(', ')
     };
   }
-  const circle = state.exploreCircle;
+  const segment = state.exploreSegment;
   return {
-    product: circle?.filter.product || state.filters.product,
-    competitor: circle?.filter.competitors?.join(', ') || state.filters.competitors.join(', '),
-    tech: circle?.filter.tech?.join(', ') || state.filters.tech.join(', ')
+    product: segment?.filter.product || state.filters.product,
+    competitor: segment?.filter.competitors?.join(', ') || state.filters.competitors.join(', '),
+    tech: segment?.filter.tech?.join(', ') || state.filters.tech.join(', ')
   };
 }
 
