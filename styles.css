@@ -304,6 +304,7 @@ body {
   overflow-y: auto;
   max-height: calc(100vh - 120px);
   padding-right: 6px;
+  padding-bottom: 12px;
   display: flex;
   flex-direction: column;
   flex: 1;
