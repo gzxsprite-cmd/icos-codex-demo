@@ -431,8 +431,9 @@ const state = {
   filters: deepClone(DEFAULT_FILTERS),
   savedFilters: [],
   chartInstance: null,
-  priceInfoCollapsed: new Set(),
-  chartSort: 'recent',
+  expandedPriceSections: new Set(),
+  expandedBackgroundSections: new Set(),
+  chartSort: 'price',
   currentCases: [],
   fullFilteredCount: 0,
   messageSort: 'date',
@@ -441,7 +442,7 @@ const state = {
   pendingHighlight: null,
   editingCaseId: null,
   leadModalMode: 'create',
-  limitToastCount: null
+  lastToastType: null
 };
 
 const filtersTimeToMonths = {
@@ -540,7 +541,11 @@ function computeVisibleCases() {
     });
   }
   const limited = sorted.slice(0, 12);
-  return { cases: limited, total: sorted.length };
+  return { chartCases: limited, total: sorted.length, allCases: sorted };
+}
+
+function queueFilterToast() {
+  state.lastToastType = null;
 }
 
 function getCaseById(id) {
@@ -563,7 +568,7 @@ const step3 = document.getElementById('step3');
 
 function renderApp() {
   const computed = computeVisibleCases();
-  state.currentCases = computed.cases;
+  state.currentCases = computed.allCases;
   state.fullFilteredCount = computed.total;
   renderStep1();
   renderStep2(computed);
@@ -621,7 +626,7 @@ function renderStep1() {
             setTimeout(() => {
               state.savedFilters.splice(idx, 1);
               renderApp();
-              showToast('✅ Deleted successfully');
+              showToast('✅ Deleted successfully', 'success');
             }, 300);
           }
         });
@@ -629,6 +634,7 @@ function renderStep1() {
       item.append(content, deleteBtn);
       item.addEventListener('click', () => {
         state.filters = deepClone(saved);
+        queueFilterToast();
         renderApp();
       });
       savedList.appendChild(item);
@@ -648,6 +654,7 @@ function renderStep1() {
     if (state.filters.time === key) btn.classList.add('active');
     btn.addEventListener('click', () => {
       state.filters.time = key;
+      queueFilterToast();
       renderApp();
     });
     timeButtons.appendChild(btn);
@@ -669,6 +676,7 @@ function renderStep1() {
     input.checked = state.filters.product === prod;
     input.addEventListener('change', () => {
       state.filters.product = prod;
+      queueFilterToast();
       renderApp();
     });
     label.appendChild(input);
@@ -697,6 +705,7 @@ function renderStep1() {
       } else {
         state.filters.competitors.push(comp);
       }
+      queueFilterToast();
       renderApp();
     });
     competitorChips.appendChild(chip);
@@ -721,6 +730,7 @@ function renderStep1() {
       } else {
         state.filters.tech.push(tech);
       }
+      queueFilterToast();
       renderApp();
     });
     techChips.appendChild(chip);
@@ -764,6 +774,7 @@ function renderStep1() {
   filterBtn.textContent = 'Filter';
   filterBtn.className = 'primary';
   filterBtn.addEventListener('click', () => {
+    queueFilterToast();
     renderApp();
   });
   const resetBtn = document.createElement('button');
@@ -771,7 +782,10 @@ function renderStep1() {
   resetBtn.className = 'ghost';
   resetBtn.addEventListener('click', () => {
     state.filters = deepClone(DEFAULT_FILTERS);
-    state.priceInfoCollapsed.clear();
+    state.expandedPriceSections.clear();
+    state.expandedBackgroundSections.clear();
+    state.chartSort = 'price';
+    queueFilterToast();
     renderApp();
   });
   const saveBtn = document.createElement('button');
@@ -788,6 +802,7 @@ function renderStep1() {
 }
 
 const chartPalette = ['#0B5CFF', '#3B82F6', '#6366F1', '#F59E0B', '#EF4444', '#10B981', '#14B8A6', '#8B5CF6', '#EC4899', '#F97316', '#1D4ED8', '#0EA5E9'];
+const LOWEST_LINE_COLOR = '#FFD60A';
 
 const lowestLineGlow = {
   id: 'lowestLineGlow',
@@ -798,8 +813,8 @@ const lowestLineGlow = {
       const meta = chart.getDatasetMeta(index);
       if (!meta || meta.hidden) return;
       ctx.save();
-      ctx.shadowColor = 'rgba(11, 92, 255, 0.45)';
-      ctx.shadowBlur = 12;
+      ctx.shadowColor = 'rgba(255, 214, 10, 0.8)';
+      ctx.shadowBlur = 16;
       ctx.lineJoin = 'round';
       ctx.lineCap = 'round';
       ctx.lineWidth = dataset.borderWidth;
@@ -811,7 +826,7 @@ const lowestLineGlow = {
   }
 };
 
-function renderStep2({ cases, total }) {
+function renderStep2({ chartCases, total }) {
   step2.innerHTML = '';
   const container = document.createElement('div');
   container.innerHTML = `
@@ -823,25 +838,42 @@ function renderStep2({ cases, total }) {
   const tagsRow = createTagRow(buildFocusTags());
   container.appendChild(tagsRow);
 
-  const sortBar = document.createElement('div');
-  sortBar.className = 'sort-toggle';
-  sortBar.innerHTML = `
-    <span class="mode-hint">Sort visible lines:</span>
-    <div class="sort-buttons">
-      <button type="button" data-sort="recent" ${state.chartSort === 'recent' ? 'class="active"' : ''}>By Recent Lead</button>
-      <button type="button" data-sort="price" ${state.chartSort === 'price' ? 'class="active"' : ''}>By Price Ascending</button>
-    </div>
-  `;
-  sortBar.querySelectorAll('[data-sort]').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const value = btn.getAttribute('data-sort');
-      if (state.chartSort !== value) {
-        state.chartSort = value;
-        renderApp();
-      }
+  const feedback = document.createElement('div');
+  feedback.className = 'result-feedback';
+  const countLine = document.createElement('div');
+  countLine.className = 'result-count';
+  countLine.textContent = `🎯 ${total} results found for current filters.`;
+  feedback.appendChild(countLine);
+  if (total > 12) {
+    const warnLine = document.createElement('div');
+    warnLine.className = 'result-warning';
+    warnLine.innerHTML = `<span class="pulse-icon">⚠️</span> Chart displays only 12 lines due to visualization limit. Please refine filters or enable advanced filtering.`;
+    feedback.appendChild(warnLine);
+  }
+  container.appendChild(feedback);
+
+  if (total > 12) {
+    const sortBar = document.createElement('div');
+    sortBar.className = 'sort-toggle';
+    sortBar.innerHTML = `
+      <span class="mode-hint">Sort visible lines:</span>
+      <div class="sort-buttons">
+        <button type="button" data-sort="recent" ${state.chartSort === 'recent' ? 'class="active"' : ''}>By Recent Lead</button>
+        <button type="button" data-sort="price" ${state.chartSort === 'price' ? 'class="active"' : ''}>By Price Ascending</button>
+      </div>
+    `;
+    sortBar.querySelectorAll('[data-sort]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const value = btn.getAttribute('data-sort');
+        if (state.chartSort !== value) {
+          state.chartSort = value;
+          queueFilterToast();
+          renderApp();
+        }
+      });
     });
-  });
-  container.appendChild(sortBar);
+    container.appendChild(sortBar);
+  }
 
   const chartHolder = document.createElement('div');
   chartHolder.className = 'chart-container';
@@ -859,14 +891,17 @@ function renderStep2({ cases, total }) {
 
   step2.appendChild(container);
 
-  if (total > 12 && state.limitToastCount !== total) {
-    showToast('Only top 12 cases are displayed.');
-    state.limitToastCount = total;
-  } else if (total <= 12) {
-    state.limitToastCount = null;
+  const toastKey = `${total > 12 ? 'limit' : 'all'}-${total}`;
+  if (state.lastToastType !== toastKey) {
+    if (total > 12) {
+      showToast('⚠️ Chart shows only 12 lines', 'warning');
+    } else {
+      showToast('✅ All results displayed', 'info');
+    }
+    state.lastToastType = toastKey;
   }
 
-  if (!cases.length) {
+  if (!chartCases.length) {
     chartHolder.innerHTML = '<div class="mode-hint">No cases found for the current filters.</div>';
     minTableContainer.innerHTML = '';
     minTableContainer.classList.add('hidden');
@@ -878,7 +913,7 @@ function renderStep2({ cases, total }) {
   }
 
   const ctx = document.getElementById('priceChart');
-  const datasets = cases.map((item, idx) => {
+  const datasets = chartCases.map((item, idx) => {
     const years = Object.keys(item.prices)
       .map((year) => Number(year))
       .sort((a, b) => a - b);
@@ -905,6 +940,8 @@ function renderStep2({ cases, total }) {
       dataset.isLowest = dataset === lowest;
       if (dataset.isLowest) {
         dataset.borderWidth = 4;
+        dataset.borderColor = LOWEST_LINE_COLOR;
+        dataset.backgroundColor = LOWEST_LINE_COLOR;
       }
     });
   }
@@ -964,9 +1001,11 @@ function renderStep2({ cases, total }) {
           callbacks: {
             title: () => '',
             label: (ctx) => {
-              const dataset = ctx.dataset;
-              const item = getCaseById(dataset.caseId);
-              return `${item.client} ${item.project} | SOP ${item.sopYear} : ${ctx.parsed.y} CNY`;
+              const dataset = ctx.dataset || {};
+              const item = dataset.caseId ? getCaseById(dataset.caseId) : null;
+              if (!item) return '';
+              const prefix = dataset.isLowest ? '🟡 Lowest Price Case · ' : '';
+              return `${prefix}${item.client} ${item.project} | SOP ${item.sopYear} : ${ctx.parsed.y} CNY`;
             }
           }
         }
@@ -1007,9 +1046,11 @@ function applyChartFocus(chart, focusIndex) {
   if (!chart) return;
   chart.data.datasets.forEach((dataset, idx) => {
     const isActive = focusIndex === null || focusIndex === idx;
-    const baseAlpha = dataset.isLowest ? 1 : isActive ? 1 : 0.3;
-    dataset.borderColor = hexToRgba(dataset.baseColor, baseAlpha);
-    dataset.backgroundColor = hexToRgba(dataset.baseColor, baseAlpha);
+    const baseColor = dataset.isLowest ? LOWEST_LINE_COLOR : dataset.baseColor;
+    const alpha = dataset.isLowest ? 1 : isActive ? 1 : 0.3;
+    const computedColor = dataset.isLowest ? baseColor : hexToRgba(baseColor, alpha);
+    dataset.borderColor = computedColor;
+    dataset.backgroundColor = dataset.isLowest ? baseColor : computedColor;
     dataset.borderWidth = dataset.isLowest ? 4 : isActive && focusIndex !== null ? 3 : 2;
   });
   chart.update('none');
@@ -1131,78 +1172,112 @@ function renderStep3(cases) {
     return;
   }
 
+  const visibleIds = new Set(cases.map((item) => item.id));
+  [...state.expandedPriceSections].forEach((id) => {
+    if (!visibleIds.has(id)) state.expandedPriceSections.delete(id);
+  });
+  [...state.expandedBackgroundSections].forEach((id) => {
+    if (!visibleIds.has(id)) state.expandedBackgroundSections.delete(id);
+  });
+
+  const buildCollapsible = (title, expandedSet, id, contentBuilder) => {
+    const isExpanded = expandedSet.has(id);
+    const section = document.createElement('section');
+    section.className = `info-section collapsible ${isExpanded ? 'expanded' : 'collapsed'}`;
+    const headerBtn = document.createElement('button');
+    headerBtn.type = 'button';
+    headerBtn.className = 'section-header';
+    headerBtn.innerHTML = `<span>${title}</span><span class="chevron" aria-hidden="true">▸</span>`;
+    const body = document.createElement('div');
+    body.className = 'section-body';
+    body.innerHTML = contentBuilder();
+    section.append(headerBtn, body);
+
+    const applyState = (expanded) => {
+      section.classList.toggle('expanded', expanded);
+      section.classList.toggle('collapsed', !expanded);
+      body.style.maxHeight = expanded ? `${body.scrollHeight}px` : '0px';
+      body.style.opacity = expanded ? '1' : '0';
+      headerBtn.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+    };
+    applyState(isExpanded);
+
+    headerBtn.addEventListener('click', () => {
+      const next = !expandedSet.has(id);
+      if (next) {
+        expandedSet.add(id);
+      } else {
+        expandedSet.delete(id);
+      }
+      applyState(next);
+    });
+
+    return section;
+  };
+
   cases.forEach((item) => {
     const card = document.createElement('div');
     card.className = 'case-card';
     card.dataset.caseId = item.id;
     card.id = `card-${item.id}`;
-    card.innerHTML = `
-      <div class="card-header">
-        <h3>${formatCurrency(item.sopPrice)}</h3>
-        <h4>${item.client} – ${item.project} – ${item.product} | SOP ${item.sopYear}</h4>
-      </div>
-      <div class="card-section">
-        <h5>1. Project Info</h5>
-        <p><strong>Client:</strong> ${item.client}</p>
-        <p><strong>Project:</strong> ${item.project}</p>
-        <p><strong>Product:</strong> ${item.product}</p>
-        <p><strong>Competitor:</strong> ${item.competitor}</p>
-        <p><strong>Tech:</strong> ${item.tech.join(', ')}</p>
-        <p><strong>SOP Year:</strong> ${item.sopYear}</p>
-        <p><strong>Lead Month:</strong> ${item.leadMonth}</p>
-        <p><strong>Submitter:</strong> ${item.submitter}</p>
-        <p><strong>Volume:</strong> ${item.volume?.toLocaleString?.() || '—'} units</p>
-      </div>
-      <div class="card-section price-info ${state.priceInfoCollapsed.has(item.id) ? 'collapsed' : 'expanded'}" data-price="${item.id}">
-        <button class="collapse-toggle" data-price-toggle>
-          <span>2. Price Info</span>
-          <span>${state.priceInfoCollapsed.has(item.id) ? '▸' : '▾'}</span>
-        </button>
-        <div class="price-info-body">
-          ${Object.keys(item.prices)
-            .map((year) => `<p><strong>${year}:</strong> ${formatCurrency(item.prices[year])}</p>`)
-            .join('')}
-          <p><strong>PCR Rate:</strong> ${item.pcrRate ? `${item.pcrRate}%` : '—'}</p>
-          <p><strong>PCR Years:</strong> ${item.pcrYears ?? '—'}</p>
-        </div>
-      </div>
-      <div class="card-section">
-        <details>
-          <summary>3. Background Info</summary>
-          <p><strong>Remarks:</strong> ${item.remarks || '—'}</p>
-          <p><strong>Source Type:</strong> ${item.source || '—'}</p>
-          <p><strong>Special Terms:</strong> ${item.terms || 'None'}</p>
-          <p><strong>Attachments:</strong> ${item.attachments.length ? item.attachments.join(', ') : 'None'}</p>
-        </details>
-      </div>
-      <div class="card-actions">
-        <button type="button" class="edit-case" data-edit="${item.id}">✏️ Edit</button>
-      </div>
+    const header = document.createElement('div');
+    header.className = 'card-header';
+    header.innerHTML = `
+      <h3>${formatCurrency(item.sopPrice)}</h3>
+      <h4>${item.client} – ${item.project} – ${item.product} | SOP ${item.sopYear}</h4>
     `;
-    const priceSection = card.querySelector('.price-info');
-    const body = priceSection.querySelector('.price-info-body');
-    requestAnimationFrame(() => {
-      body.style.maxHeight = priceSection.classList.contains('collapsed') ? '0px' : `${body.scrollHeight}px`;
-      body.style.opacity = priceSection.classList.contains('collapsed') ? '0' : '1';
-    });
-    priceSection.querySelector('[data-price-toggle]').addEventListener('click', () => {
-      const willCollapse = !priceSection.classList.contains('collapsed');
-      priceSection.classList.toggle('collapsed', willCollapse);
-      priceSection.classList.toggle('expanded', !willCollapse);
-      priceSection.querySelector('[data-price-toggle] span:last-child').textContent = willCollapse ? '▸' : '▾';
-      if (willCollapse) {
-        state.priceInfoCollapsed.add(item.id);
-        body.style.maxHeight = '0px';
-        body.style.opacity = '0';
-      } else {
-        state.priceInfoCollapsed.delete(item.id);
-        body.style.maxHeight = `${body.scrollHeight}px`;
-        body.style.opacity = '1';
-      }
-    });
-    card.querySelector('[data-edit]').addEventListener('click', () => {
+    card.appendChild(header);
+
+    const projectSection = document.createElement('section');
+    projectSection.className = 'info-section static';
+    const projectTitle = document.createElement('h5');
+    projectTitle.textContent = '1. Project Info';
+    const projectBody = document.createElement('div');
+    projectBody.className = 'section-body static-body';
+    projectBody.innerHTML = `
+      <p><strong>Client:</strong> ${item.client}</p>
+      <p><strong>Project:</strong> ${item.project}</p>
+      <p><strong>Product:</strong> ${item.product}</p>
+      <p><strong>Competitor:</strong> ${item.competitor}</p>
+      <p><strong>Tech:</strong> ${item.tech.join(', ')}</p>
+      <p><strong>SOP Year:</strong> ${item.sopYear}</p>
+      <p><strong>Lead Month:</strong> ${item.leadMonth}</p>
+      <p><strong>Submitter:</strong> ${item.submitter}</p>
+      <p><strong>Volume:</strong> ${item.volume?.toLocaleString?.() || '—'} units</p>
+    `;
+    projectSection.append(projectTitle, projectBody);
+    card.appendChild(projectSection);
+
+    const priceSection = buildCollapsible('2. Price Info', state.expandedPriceSections, item.id, () => `
+      ${Object.keys(item.prices)
+        .map((year) => `<p><strong>${year}:</strong> ${formatCurrency(item.prices[year])}</p>`)
+        .join('')}
+      <p><strong>PCR Rate:</strong> ${item.pcrRate ? `${item.pcrRate}%` : '—'}</p>
+      <p><strong>PCR Years:</strong> ${item.pcrYears ?? '—'}</p>
+    `);
+    card.appendChild(priceSection);
+
+    const backgroundSection = buildCollapsible('3. Background Info', state.expandedBackgroundSections, item.id, () => `
+      <p><strong>Remarks:</strong> ${item.remarks || '—'}</p>
+      <p><strong>Source Type:</strong> ${item.source || '—'}</p>
+      <p><strong>Special Terms:</strong> ${item.terms || 'None'}</p>
+      <p><strong>Attachments:</strong> ${item.attachments.length ? item.attachments.join(', ') : 'None'}</p>
+    `);
+    card.appendChild(backgroundSection);
+
+    const actions = document.createElement('div');
+    actions.className = 'card-actions';
+    const editBtn = document.createElement('button');
+    editBtn.type = 'button';
+    editBtn.className = 'edit-case';
+    editBtn.dataset.edit = item.id;
+    editBtn.textContent = '✏️ Edit';
+    editBtn.addEventListener('click', () => {
       openEditModal(item.id);
     });
+    actions.appendChild(editBtn);
+    card.appendChild(actions);
+
     container.appendChild(card);
   });
   panel.appendChild(container);
@@ -1307,8 +1382,9 @@ function applyMessageCase(message) {
   };
   state.chartSort = 'recent';
   state.pendingHighlight = caseData.id;
-  showToast('🔍 Filter updated by selected case');
+  showToast('🔍 Filter updated by selected case', 'highlight');
   closeMessagesPanel();
+  queueFilterToast();
   renderApp();
 }
 
@@ -1469,10 +1545,13 @@ if (newLeadModal) {
   });
 }
 
-function showToast(message) {
+function showToast(message, type = 'info') {
+  const toneClasses = ['info', 'success', 'warning', 'highlight'];
   toast.textContent = message;
+  toast.classList.remove('show', ...toneClasses, 'hidden');
+  void toast.offsetWidth; // restart animation
+  toast.classList.add(type);
   toast.classList.add('show');
-  toast.classList.remove('hidden');
   setTimeout(() => {
     toast.classList.remove('show');
     setTimeout(() => toast.classList.add('hidden'), 300);
@@ -1521,7 +1600,7 @@ leadForm.addEventListener('submit', (e) => {
       existing.prices = newPrices;
     }
     closeLeadModal();
-    showToast('✅ Case updated successfully');
+    showToast('✅ Case updated successfully', 'success');
     renderApp();
     return;
   }
@@ -1555,7 +1634,7 @@ leadForm.addEventListener('submit', (e) => {
   }
   caseDataset.unshift(newCase);
   closeLeadModal();
-  showToast('✅ New price lead added');
+  showToast('✅ New price lead added', 'success');
   renderApp();
 });
 

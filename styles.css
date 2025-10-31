@@ -411,6 +411,41 @@ body {
   box-shadow: 0 8px 18px rgba(11, 92, 255, 0.12);
 }
 
+.result-feedback {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.9rem;
+  color: #1f2933;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 10px 14px;
+}
+
+.result-count {
+  font-weight: 600;
+  color: #0b5cff;
+}
+
+.result-warning {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  color: #f39c12;
+  line-height: 1.4;
+  font-weight: 600;
+}
+
+.pulse-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  animation: pulseGlow 1.6s ease-in-out infinite;
+}
+
 .min-price-table-container {
   margin-top: 12px;
   width: 100%;
@@ -520,17 +555,42 @@ body.editing-case-active .min-price-table-container {
   color: var(--muted);
 }
 
-.card-section {
+.case-card h5 {
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #1f2933;
+}
+
+.info-section {
   margin-top: 12px;
   padding-top: 12px;
   border-top: 1px solid #f1f5f9;
 }
 
-.price-info {
-  transition: background 0.2s ease;
+.info-section.static .section-body {
+  max-height: none;
+  opacity: 1;
 }
 
-.price-info .collapse-toggle {
+.info-section.collapsible {
+  border-radius: 12px;
+  transition: box-shadow 0.3s ease, background 0.3s ease;
+}
+
+.info-section.collapsible.expanded {
+  background: rgba(11, 92, 255, 0.04);
+  box-shadow: 0 18px 32px rgba(15, 23, 42, 0.08);
+  padding: 12px;
+  border-top: none;
+}
+
+.info-section.collapsible.collapsed {
+  background: transparent;
+  box-shadow: none;
+}
+
+.section-header {
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -538,44 +598,57 @@ body.editing-case-active .min-price-table-container {
   background: none;
   border: none;
   padding: 0;
+  font-size: 0.95rem;
   font-weight: 600;
   cursor: pointer;
+  color: #1f2933;
+  transition: color 0.2s ease;
 }
 
-.price-info .collapse-toggle span:first-child {
-  font-weight: 600;
+.section-header:hover {
+  color: var(--accent);
 }
 
-.price-info .collapse-toggle {
-  margin-bottom: 8px;
-}
-
-.price-info-body {
-  overflow: hidden;
-  transition: max-height 0.35s ease-in-out, opacity 0.35s ease-in-out;
-  opacity: 1;
-}
-
-.price-info.collapsed .price-info-body {
-  opacity: 0;
-}
-
-.card-section details {
-  background: #f9fafb;
-  padding: 8px;
-  border-radius: 10px;
-}
-
-.card-section dl {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px 12px;
-  margin: 0;
+.section-header .chevron {
   font-size: 0.85rem;
+  color: #64748b;
+  transition: transform 0.35s ease, color 0.2s ease;
 }
 
-.card-section dt {
-  font-weight: 600;
+.info-section.collapsible.expanded .section-header .chevron {
+  transform: rotate(90deg);
+  color: var(--accent);
+}
+
+.section-body {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.9rem;
+  color: #1f2933;
+}
+
+.section-body p {
+  margin: 0;
+}
+
+.info-section.collapsible .section-body {
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 0.35s ease-in-out, opacity 0.35s ease-in-out, padding 0.35s ease-in-out;
+  padding-top: 0;
+}
+
+.info-section.collapsible.expanded .section-body {
+  opacity: 1;
+  max-height: 600px;
+  padding-top: 6px;
+}
+
+.info-section.static .section-body {
+  padding-top: 6px;
 }
 
 .card-actions {
@@ -1216,6 +1289,22 @@ body.editing-case-active .min-price-table-container {
   z-index: 80;
 }
 
+.toast.info,
+.toast.success {
+  background: #0b5cff;
+  color: #fff;
+}
+
+.toast.warning {
+  background: #f39c12;
+  color: #fff;
+}
+
+.toast.highlight {
+  background: #ffd60a;
+  color: #1f2933;
+}
+
 .toast.show {
   animation: toastIn 0.3s ease forwards, toastOut 0.3s ease 1.7s forwards;
 }
@@ -1406,6 +1495,18 @@ body.editing-case-active .min-price-table-container {
   to {
     opacity: 0;
     transform: translateY(-6px);
+  }
+}
+
+@keyframes pulseGlow {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
   }
 }
 
