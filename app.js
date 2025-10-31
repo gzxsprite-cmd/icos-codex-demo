@@ -441,6 +441,28 @@ const caseDataset = [
     submitter: 'Liang Bo',
     leadDate: '2025-03-09',
     volume: 46000
+  },
+  {
+    id: 'C021',
+    client: 'Leapmotor',
+    project: 'Vector',
+    product: 'IPB',
+    competitor: 'BTL',
+    tech: ['RoPP41', 'WOP'],
+    sopYear: 2026,
+    sopPrice: 1288,
+    prices: { 2026: 1288, 2027: 1265, 2028: 1242, 2029: 1220, 2030: 1205 },
+    pcrRate: 2.6,
+    pcrYears: 3,
+    leadMonth: '2025-07',
+    tier: 'L2',
+    source: 'Confirmed',
+    remarks: 'BTL matched Conti to defend long-term platform.',
+    terms: 'Requires quarterly performance review.',
+    attachments: ['pricing-dossier.pdf'],
+    submitter: 'Zhang Wei',
+    leadDate: '2025-07-27',
+    volume: 42000
   }
 ];
 
