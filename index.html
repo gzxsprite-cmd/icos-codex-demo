@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>iCoS Commercial v3.6 Demo</title>
+  <title>iCoS Commercial v4.1 Demo</title>
   <link rel="stylesheet" href="styles.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,12 +13,14 @@
 <body>
   <div id="app" class="app-container">
     <header class="top-bar">
-      <span class="app-title">iCoS Commercial v3.6</span>
-      <div class="mode-switch-bar">
-        <button class="mode-tab active" data-mode="focus" aria-pressed="true">🔍 Find Prices</button>
-        <button class="mode-tab" data-mode="explore" aria-pressed="false">📈 See What's New</button>
+      <span class="app-title">iCoS Commercial v4.1</span>
+      <div class="top-bar-actions">
+        <button class="top-action new-messages" id="messagesBtn" aria-haspopup="true" aria-expanded="false">
+          📩 New Messages
+          <span class="badge hidden" id="messagesBadge">0</span>
+        </button>
+        <button class="top-action primary" id="newLeadBtn">➕ New Price Lead</button>
       </div>
-      <button class="top-action" id="newLeadBtn">➕ New Price Lead</button>
     </header>
 
     <main class="content-area">
@@ -130,6 +132,20 @@
   </div>
 
   <div class="toast hidden" id="toast"></div>
+
+  <div class="messages-panel hidden" id="messagesPanel" role="dialog" aria-modal="true">
+    <div class="messages-header">
+      <h3>🆕 New Price Updates</h3>
+      <div class="messages-sort">
+        <button type="button" data-sort="date" class="active">By Date</button>
+        <button type="button" data-sort="price">By Price</button>
+      </div>
+    </div>
+    <div class="messages-list" id="messagesList"></div>
+    <div class="messages-footer">
+      <button type="button" id="markAllRead">Mark all as read</button>
+    </div>
+  </div>
 
   <script type="module" src="app.js"></script>
 </body>

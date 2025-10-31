@@ -21,7 +21,8 @@ const caseDataset = [
     terms: 'Volume bonus after 50k units.',
     attachments: ['spec-sheet.pdf'],
     submitter: 'Liu Hong',
-    leadDate: '2025-09-10'
+    leadDate: '2025-09-10',
+    volume: 52000
   },
   {
     id: 'C002',
@@ -42,7 +43,8 @@ const caseDataset = [
     terms: 'Standard warranty.',
     attachments: ['benchmark.xlsx'],
     submitter: 'Chen Yu',
-    leadDate: '2025-08-18'
+    leadDate: '2025-08-18',
+    volume: 44000
   },
   {
     id: 'C003',
@@ -63,7 +65,8 @@ const caseDataset = [
     terms: 'Pending confirmation.',
     attachments: ['notes.docx'],
     submitter: 'Zhao Lei',
-    leadDate: '2025-07-02'
+    leadDate: '2025-07-02',
+    volume: 38000
   },
   {
     id: 'C004',
@@ -84,7 +87,8 @@ const caseDataset = [
     terms: 'Bundle with ABS module.',
     attachments: [],
     submitter: 'Fan Yi',
-    leadDate: '2025-06-12'
+    leadDate: '2025-06-12',
+    volume: 41000
   },
   {
     id: 'C005',
@@ -105,7 +109,8 @@ const caseDataset = [
     terms: 'Payment 45 days.',
     attachments: ['contract.pdf'],
     submitter: 'Huang Ming',
-    leadDate: '2025-05-20'
+    leadDate: '2025-05-20',
+    volume: 36000
   },
   {
     id: 'C006',
@@ -126,7 +131,8 @@ const caseDataset = [
     terms: 'Includes OTA support.',
     attachments: ['analysis.pdf'],
     submitter: 'Jiang Hui',
-    leadDate: '2025-04-08'
+    leadDate: '2025-04-08',
+    volume: 39000
   },
   {
     id: 'C007',
@@ -147,7 +153,8 @@ const caseDataset = [
     terms: 'Extended warranty 5 years.',
     attachments: [],
     submitter: 'Ma Qiang',
-    leadDate: '2025-03-14'
+    leadDate: '2025-03-14',
+    volume: 35000
   },
   {
     id: 'C008',
@@ -168,7 +175,8 @@ const caseDataset = [
     terms: 'Pending NDA review.',
     attachments: [],
     submitter: 'Lin Tao',
-    leadDate: '2025-02-05'
+    leadDate: '2025-02-05',
+    volume: 33000
   },
   {
     id: 'C009',
@@ -189,7 +197,8 @@ const caseDataset = [
     terms: 'Rebate at 80k units.',
     attachments: ['proposal.pdf'],
     submitter: 'Sun Ke',
-    leadDate: '2025-01-22'
+    leadDate: '2025-01-22',
+    volume: 42000
   },
   {
     id: 'C010',
@@ -198,103 +207,108 @@ const caseDataset = [
     product: 'IPB',
     competitor: 'Conti',
     tech: ['RoPP41'],
-    sopYear: 2024,
-    sopPrice: 1335,
-    prices: { 2024: 1335, 2025: 1318, 2026: 1302, 2027: 1288, 2028: 1275 },
-    pcrRate: 1.9,
+    sopYear: 2025,
+    sopPrice: 1305,
+    prices: { 2025: 1305, 2026: 1288, 2027: 1264, 2028: 1240, 2029: 1225 },
+    pcrRate: 2.6,
     pcrYears: 2,
     leadMonth: '2024-12',
-    tier: 'L1',
-    source: 'Rumor',
-    remarks: 'Regional partner update.',
-    terms: 'To be confirmed.',
-    attachments: ['email.msg'],
-    submitter: 'Wu Di',
-    leadDate: '2024-12-28'
+    tier: 'L2',
+    source: 'Analyzed',
+    remarks: 'Aligned with Korean EV launch.',
+    terms: 'Bundled service contract.',
+    attachments: ['benchmark.xlsx'],
+    submitter: 'Park Jin',
+    leadDate: '2024-12-18',
+    volume: 37000
   },
   {
     id: 'C011',
     client: 'SAIC',
-    project: 'Alpha Max',
+    project: 'Voyager',
     product: 'IPB',
     competitor: 'Conti',
     tech: ['RoPP41', 'iTPMs'],
-    sopYear: 2027,
-    sopPrice: 1245,
-    prices: { 2027: 1245, 2028: 1230, 2029: 1210, 2030: 1195, 2031: 1180 },
-    pcrRate: 2.6,
-    pcrYears: 3,
-    leadMonth: '2025-09',
-    tier: 'L1',
+    sopYear: 2026,
+    sopPrice: 1255,
+    prices: { 2026: 1255, 2027: 1235, 2028: 1215, 2029: 1195, 2030: 1185 },
+    pcrRate: 2.3,
+    pcrYears: 2,
+    leadMonth: '2025-08',
+    tier: 'L3',
     source: 'Analyzed',
-    remarks: 'Derived from roadmap negotiations.',
-    terms: 'Option to extend warranty.',
-    attachments: [],
-    submitter: 'Liu Hong',
-    leadDate: '2025-09-05'
+    remarks: 'EV variant update.',
+    terms: 'Extra rebate if volume exceeds 60k.',
+    attachments: ['concept.pdf'],
+    submitter: 'Gu Wei',
+    leadDate: '2025-08-02',
+    volume: 54000
   },
   {
     id: 'C012',
-    client: 'Geely',
-    project: 'Nebula Plus',
+    client: 'Chery',
+    project: 'Nova-E',
     product: 'IPB',
-    competitor: 'Conti',
-    tech: ['RoPP41'],
-    sopYear: 2026,
-    sopPrice: 1275,
-    prices: { 2026: 1275, 2027: 1250, 2028: 1230, 2029: 1210, 2030: 1198 },
-    pcrRate: 2.2,
-    pcrYears: 2,
-    leadMonth: '2025-08',
+    competitor: 'Bosch',
+    tech: ['APB-Mi'],
+    sopYear: 2025,
+    sopPrice: 1325,
+    prices: { 2025: 1325, 2026: 1300, 2027: 1275, 2028: 1250, 2029: 1235 },
+    pcrRate: 2.0,
+    pcrYears: 3,
+    leadMonth: '2025-07',
     tier: 'L2',
     source: 'Confirmed',
-    remarks: 'Competitive win over Bosch benchmark.',
-    terms: 'Requires service bundle.',
-    attachments: ['q2-summary.pdf'],
-    submitter: 'Chen Yu',
-    leadDate: '2025-08-12'
+    remarks: 'Competitive pressure from Bosch follow-up.',
+    terms: 'Includes retrofit support.',
+    attachments: ['retrofit.docx'],
+    submitter: 'Deng Qi',
+    leadDate: '2025-07-19',
+    volume: 41000
   },
   {
     id: 'C013',
-    client: 'Great Wall',
-    project: 'Atlas Hybrid',
+    client: 'XPeng',
+    project: 'Falcon',
     product: 'ESP',
-    competitor: 'ZF',
-    tech: ['WOP'],
+    competitor: 'Conti',
+    tech: ['iTPMs', 'RSV'],
     sopYear: 2026,
-    sopPrice: 1220,
-    prices: { 2026: 1220, 2027: 1208, 2028: 1190, 2029: 1178, 2030: 1162 },
-    pcrRate: 1.7,
+    sopPrice: 1210,
+    prices: { 2026: 1210, 2027: 1190, 2028: 1170, 2029: 1150, 2030: 1135 },
+    pcrRate: 1.9,
     pcrYears: 2,
-    leadMonth: '2025-06',
-    tier: 'L2',
+    leadMonth: '2025-09',
+    tier: 'L3',
     source: 'Analyzed',
-    remarks: 'Competitor undercut by 3%.',
-    terms: 'Bundle with steering ECU.',
-    attachments: [],
-    submitter: 'Ma Qiang',
-    leadDate: '2025-06-25'
+    remarks: 'RSV package upsell opportunity.',
+    terms: 'Early commitment rebate.',
+    attachments: ['upsell.pdf'],
+    submitter: 'Luo Ming',
+    leadDate: '2025-09-05',
+    volume: 36000
   },
   {
     id: 'C014',
-    client: 'XPeng',
-    project: 'Glider Max',
+    client: 'BYD',
+    project: 'Seagull',
     product: 'IPB',
-    competitor: 'BTL',
-    tech: ['APB-Mi'],
-    sopYear: 2027,
-    sopPrice: 1235,
-    prices: { 2027: 1235, 2028: 1210, 2029: 1185, 2030: 1160, 2031: 1145 },
-    pcrRate: 2.9,
+    competitor: 'Bosch',
+    tech: ['RoPP41'],
+    sopYear: 2025,
+    sopPrice: 1275,
+    prices: { 2025: 1275, 2026: 1245, 2027: 1220, 2028: 1198, 2029: 1180 },
+    pcrRate: 2.7,
     pcrYears: 3,
-    leadMonth: '2025-07',
-    tier: 'L1',
-    source: 'Rumor',
-    remarks: 'Potential joint venture offer.',
-    terms: 'Subject to volume commitment.',
+    leadMonth: '2025-06',
+    tier: 'L2',
+    source: 'Confirmed',
+    remarks: 'Volume revision mid-year.',
+    terms: 'Price tied to cobalt index.',
     attachments: [],
-    submitter: 'Jiang Hui',
-    leadDate: '2025-07-19'
+    submitter: 'He Jia',
+    leadDate: '2025-06-22',
+    volume: 47000
   },
   {
     id: 'C015',
@@ -315,7 +329,8 @@ const caseDataset = [
     terms: 'Standard clauses.',
     attachments: ['internal-memo.pdf'],
     submitter: 'Sun Ke',
-    leadDate: '2025-03-28'
+    leadDate: '2025-03-28',
+    volume: 39000
   },
   {
     id: 'C016',
@@ -336,7 +351,8 @@ const caseDataset = [
     terms: 'Includes localization rebate.',
     attachments: ['pricing-note.pdf'],
     submitter: 'He Lin',
-    leadDate: '2025-05-12'
+    leadDate: '2025-05-12',
+    volume: 43000
   },
   {
     id: 'C017',
@@ -357,7 +373,8 @@ const caseDataset = [
     terms: '3-year service extension.',
     attachments: ['council-minutes.pdf'],
     submitter: 'Zhou Fei',
-    leadDate: '2025-04-26'
+    leadDate: '2025-04-26',
+    volume: 38000
   },
   {
     id: 'C018',
@@ -378,71 +395,91 @@ const caseDataset = [
     terms: 'Requires bundled calibration service.',
     attachments: ['call-notes.txt'],
     submitter: 'Xu Ran',
-    leadDate: '2025-02-18'
+    leadDate: '2025-02-18',
+    volume: 41000
+  },
+  {
+    id: 'C019',
+    client: 'BAIC',
+    project: 'Aquila',
+    product: 'IPB',
+    competitor: 'Bosch',
+    tech: ['RoPP41', 'APB-Mi'],
+    sopYear: 2026,
+    sopPrice: 1275,
+    prices: { 2026: 1275, 2027: 1254, 2028: 1236, 2029: 1218, 2030: 1205 },
+    pcrRate: 2.2,
+    pcrYears: 3,
+    leadMonth: '2025-01',
+    tier: 'L2',
+    source: 'Confirmed',
+    remarks: 'Won defensive bid after rapid re-quote.',
+    terms: 'Includes expedited tooling support.',
+    attachments: ['pricing-confirmation.pdf'],
+    submitter: 'Gao Lin',
+    leadDate: '2025-01-30',
+    volume: 40000
+  },
+  {
+    id: 'C020',
+    client: 'Zeekr',
+    project: 'Helix',
+    product: 'IPB',
+    competitor: 'Conti',
+    tech: ['iTPMs', 'RSV'],
+    sopYear: 2027,
+    sopPrice: 1248,
+    prices: { 2027: 1248, 2028: 1226, 2029: 1208, 2030: 1190, 2031: 1175 },
+    pcrRate: 2.7,
+    pcrYears: 2,
+    leadMonth: '2025-03',
+    tier: 'L3',
+    source: 'Analyzed',
+    remarks: 'Flagged by product council as aggressive EV push.',
+    terms: 'Requires quarterly volume true-up.',
+    attachments: ['council-summary.docx'],
+    submitter: 'Liang Bo',
+    leadDate: '2025-03-09',
+    volume: 46000
+  },
+  {
+    id: 'C021',
+    client: 'Leapmotor',
+    project: 'Vector',
+    product: 'IPB',
+    competitor: 'BTL',
+    tech: ['RoPP41', 'WOP'],
+    sopYear: 2026,
+    sopPrice: 1288,
+    prices: { 2026: 1288, 2027: 1265, 2028: 1242, 2029: 1220, 2030: 1205 },
+    pcrRate: 2.6,
+    pcrYears: 3,
+    leadMonth: '2025-07',
+    tier: 'L2',
+    source: 'Confirmed',
+    remarks: 'BTL matched Conti to defend long-term platform.',
+    terms: 'Requires quarterly performance review.',
+    attachments: ['pricing-dossier.pdf'],
+    submitter: 'Zhang Wei',
+    leadDate: '2025-07-27',
+    volume: 42000
   }
 ];
 
-const segmentConfig = {
-  months: ['2024-12', '2025-01', '2025-02', '2025-03', '2025-04', '2025-05', '2025-06', '2025-07', '2025-08', '2025-09'],
-  predefined: [
-    {
-      id: 'segment-ipb',
-      name: '产品：IPB',
-      summary: '新增 +6 ｜ 新低 2',
-      filter: { product: 'IPB', competitors: [], tech: [] }
-    },
-    {
-      id: 'segment-ipb-conti',
-      name: '产品：IPB，对手：Conti',
-      summary: '新增 +4 ｜ 新低 1',
-      filter: { product: 'IPB', competitors: ['Conti'], tech: [] }
-    },
-    {
-      id: 'segment-esp-zf',
-      name: '产品：ESP，对手：ZF',
-      summary: '新增 +3 ｜ 新低 1',
-      filter: { product: 'ESP', competitors: ['ZF'], tech: [] }
-    }
-  ],
-  mySegments: [
-    {
-      id: 'segment-my-1',
-      name: 'IPB Conti RoPP41',
-      summary: '新增 +2 ｜ 新低 1',
-      filter: { product: 'IPB', competitors: ['Conti'], tech: ['RoPP41'] }
-    },
-    {
-      id: 'segment-my-2',
-      name: 'ESP ZF RSV',
-      summary: '新增 +1 ｜ 新低 0',
-      filter: { product: 'ESP', competitors: ['ZF'], tech: ['RSV'] }
-    },
-    {
-      id: 'segment-my-3',
-      name: 'ESP Continental iTPMs',
-      summary: '新增 +1 ｜ 新低 0',
-      filter: { product: 'ESP', competitors: ['Conti'], tech: ['iTPMs'] }
-    }
-  ],
-  popular: [
-    { name: 'IPB Conti', score: 95, filter: { product: 'IPB', competitors: ['Conti'], tech: [] } },
-    { name: 'ESP Price Hunt', score: 90, filter: { product: 'ESP', competitors: [], tech: ['APB-Mi'] } },
-    { name: 'IPB vs Market', score: 88, filter: { product: 'IPB', competitors: [], tech: [] } },
-    { name: 'IPB ZF RSV', score: 86, filter: { product: 'IPB', competitors: ['ZF'], tech: ['RSV'] } },
-    { name: 'ESP Global Watch', score: 84, filter: { product: 'ESP', competitors: [], tech: ['iTPMs'] } }
-  ],
-  leaderboard: {
-    monthly: [
-      { rank: 1, user: 'Zhang***', count: 9, trend: '↑2' },
-      { rank: 2, user: 'Li***', count: 7, trend: '→' },
-      { rank: 3, user: 'Wang***', count: 6, trend: '↓1' }
-    ],
-    quarterly: [
-      { rank: 1, user: 'Chen***', count: 18, trend: '↑1' },
-      { rank: 2, user: 'Sun***', count: 17, trend: '↓1' },
-      { rank: 3, user: 'Liu***', count: 14, trend: '↑2' }
-    ]
-  }
+const messageFeed = [
+  { id: 'M001', caseId: 'C013', received: '2025-10-29', status: 'LMP candidate' },
+  { id: 'M002', caseId: 'C006', received: '2025-10-27', status: 'equal LMP' },
+  { id: 'M003', caseId: 'C011', received: '2025-10-24', status: 'Normal' },
+  { id: 'M004', caseId: 'C017', received: '2025-10-22', status: 'Normal' },
+  { id: 'M005', caseId: 'C002', received: '2025-10-18', status: 'equal LMP' },
+  { id: 'M006', caseId: 'C008', received: '2025-10-16', status: 'LMP candidate' },
+  { id: 'M007', caseId: 'C005', received: '2025-10-15', status: 'Normal' }
+].map((item) => ({ ...item, read: false }));
+
+const statusClassMap = {
+  Normal: 'status-normal',
+  'equal LMP': 'status-equal',
+  'LMP candidate': 'status-lmp'
 };
 
 const deepClone = (obj) => JSON.parse(JSON.stringify(obj));
@@ -452,46 +489,50 @@ const DEFAULT_FILTERS = {
   product: 'IPB',
   competitors: ['Conti'],
   tech: ['RoPP41'],
+  sopYear: null,
   more: { customer: null, volume: null, terms: null }
 };
 
 const state = {
-  mode: 'focus',
   filters: deepClone(DEFAULT_FILTERS),
   savedFilters: [],
-  pinned: new Set(),
-  hidden: new Set(),
-  dontShowHint: false,
   chartInstance: null,
-  exploreMonth: '2025-09',
-  exploreSnapshot: 'monthly',
-  exploreSegment: null,
-  exploreExpanded: { L3: true, L2: true, L1: false },
-  leaderboardExpanded: false,
-  priceInfoCollapsed: new Set(),
-  segmentGroupOpen: { predefined: true, mine: true },
-  customSegmentOpen: false,
-  activePopularSegment: null,
-  flashSegmentName: null
+  expandedPriceSections: new Set(),
+  expandedBackgroundSections: new Set(),
+  chartSort: 'price',
+  currentCases: [],
+  fullFilteredCount: 0,
+  messageSort: 'date',
+  messagesOpen: false,
+  unreadMessages: messageFeed.filter((m) => !m.read).length,
+  pendingHighlight: null,
+  editingCaseId: null,
+  leadModalMode: 'create',
+  lastToastType: null
 };
-
-// Utility helpers
-const parseMonth = (month) => new Date(`${month}-01T00:00:00`);
-const monthsDiff = (m1, m2) => {
-  const date1 = parseMonth(m1);
-  const date2 = parseMonth(m2);
-  return (date1.getFullYear() - date2.getFullYear()) * 12 + (date1.getMonth() - date2.getMonth());
-};
-
-function getLatestLeadMonth() {
-  return caseDataset.reduce((acc, curr) => (acc > curr.leadMonth ? acc : curr.leadMonth), '0000-00');
-}
 
 const filtersTimeToMonths = {
   '3m': 3,
   '6m': 6,
   '12m': 12
 };
+
+// -----------------------------
+// Helper utilities
+// -----------------------------
+function parseMonth(month) {
+  return new Date(`${month}-01T00:00:00`);
+}
+
+function monthsDiff(m1, m2) {
+  const date1 = parseMonth(m1);
+  const date2 = parseMonth(m2);
+  return (date1.getFullYear() - date2.getFullYear()) * 12 + (date1.getMonth() - date2.getMonth());
+}
+
+function getLatestLeadMonth() {
+  return caseDataset.reduce((acc, curr) => (acc > curr.leadMonth ? acc : curr.leadMonth), '0000-00');
+}
 
 function withinTimeRange(leadMonth, monthsKey) {
   const months = filtersTimeToMonths[monthsKey];
@@ -504,30 +545,21 @@ function matchesFilters(item, filters) {
   if (filters.competitors?.length && !filters.competitors.includes(item.competitor)) return false;
   if (filters.tech?.length && !filters.tech.some((tech) => item.tech.includes(tech))) return false;
   if (filters.time && !withinTimeRange(item.leadMonth, filters.time)) return false;
+  if (filters.sopYear && Number(filters.sopYear) !== Number(item.sopYear)) return false;
   if (filters.more.customer && item.client !== filters.more.customer) return false;
+  if (filters.more.volume && String(item.volume) !== String(filters.more.volume)) return false;
+  if (filters.more.terms && !(item.terms || '').toLowerCase().includes(filters.more.terms.toLowerCase())) return false;
   return true;
 }
 
-const timeLabels = {
-  '3m': '近3月',
-  '6m': '近6月',
-  '12m': '近12月'
-};
-
-function getActiveExploreFilter() {
-  if (state.exploreSegment?.filter) {
-    return state.exploreSegment.filter;
-  }
-  return {
-    product: state.filters.product,
-    competitors: state.filters.competitors ?? [],
-    tech: state.filters.tech ?? []
-  };
+function getMinPrice(item) {
+  return Math.min(...Object.values(item.prices));
 }
 
 function buildFocusTags() {
   const filters = state.filters;
   const tags = [];
+  const timeLabels = { '3m': '近3月', '6m': '近6月', '12m': '近12月' };
   if (filters.time) tags.push({ label: `线索时间: ${timeLabels[filters.time] || filters.time}` });
   if (filters.product) tags.push({ label: `产品: ${filters.product}` });
   if (filters.competitors) {
@@ -538,27 +570,10 @@ function buildFocusTags() {
     const text = filters.tech.length ? filters.tech.join(', ') : '全部';
     tags.push({ label: `参数: ${text}` });
   }
+  if (filters.sopYear) tags.push({ label: `SOP年份: ${filters.sopYear}` });
   if (filters.more.customer) tags.push({ label: `客户: ${filters.more.customer}` });
   if (filters.more.volume) tags.push({ label: `体量: ${filters.more.volume}` });
   if (filters.more.terms) tags.push({ label: `条款: ${filters.more.terms}` });
-  return tags;
-}
-
-function buildExploreTags() {
-  const tags = [];
-  tags.push({ label: `月份: ${formatMonth(state.exploreMonth)}` });
-  const segmentName = state.exploreSegment?.name || '全部';
-  tags.push({ label: `Segment: ${segmentName}` });
-  const filter = getActiveExploreFilter();
-  if (filter.product) tags.push({ label: `产品: ${filter.product}` });
-  if (filter.competitors) {
-    const text = filter.competitors.length ? filter.competitors.join(', ') : '全部';
-    tags.push({ label: `对手: ${text}` });
-  }
-  if (filter.tech) {
-    const text = filter.tech.length ? filter.tech.join(', ') : '全部';
-    tags.push({ label: `参数: ${text}` });
-  }
   return tags;
 }
 
@@ -575,37 +590,63 @@ function createTagRow(tags) {
   return row;
 }
 
-// Rendering entry point
+function formatCurrency(value) {
+  return `${Math.round(value).toLocaleString()} CNY`;
+}
+
+function computeVisibleCases() {
+  const filtered = caseDataset.filter((item) => matchesFilters(item, state.filters));
+  let sorted = filtered.slice();
+  if (state.chartSort === 'recent') {
+    sorted.sort((a, b) => (a.leadDate < b.leadDate ? 1 : a.leadDate > b.leadDate ? -1 : 0));
+  } else {
+    sorted.sort((a, b) => {
+      const diff = getMinPrice(a) - getMinPrice(b);
+      if (diff !== 0) return diff;
+      return a.leadDate < b.leadDate ? 1 : -1;
+    });
+  }
+  const limited = sorted.slice(0, 12);
+  return { chartCases: limited, total: sorted.length, allCases: sorted };
+}
+
+function queueFilterToast() {
+  state.lastToastType = null;
+}
+
+function getCaseById(id) {
+  return caseDataset.find((item) => item.id === id);
+}
+
+function updateMessagesBadge() {
+  const badge = document.getElementById('messagesBadge');
+  if (!badge) return;
+  badge.textContent = state.unreadMessages;
+  badge.classList.toggle('hidden', state.unreadMessages === 0);
+}
+
+// -----------------------------
+// Rendering functions
+// -----------------------------
 const step1 = document.getElementById('step1');
 const step2 = document.getElementById('step2');
 const step3 = document.getElementById('step3');
 
 function renderApp() {
-  document.querySelectorAll('.mode-switch-bar .mode-tab').forEach((btn) => {
-    const isActive = btn.dataset.mode === state.mode;
-    btn.classList.toggle('active', isActive);
-    btn.setAttribute('aria-pressed', String(isActive));
-  });
-
-  if (state.mode === 'focus') {
-    state.exploreSegment = null;
-    state.leaderboardExpanded = false;
-    state.activePopularSegment = null;
-    state.flashSegmentName = null;
-    renderFocusStep1();
-    renderFocusStep2();
-    renderDetailCards(getFocusVisibleCases());
-  } else {
-    renderExploreStep1();
-    renderExploreStep2();
-    renderDetailCards(getExploreCases());
+  const computed = computeVisibleCases();
+  state.currentCases = computed.allCases;
+  state.fullFilteredCount = computed.total;
+  renderStep1();
+  renderStep2(computed);
+  renderStep3(state.currentCases);
+  updateMessagesBadge();
+  if (state.pendingHighlight) {
+    highlightCase(state.pendingHighlight);
+    state.pendingHighlight = null;
   }
 }
 
-// -----------------------------
-// Focus Mode Rendering
-// -----------------------------
-function renderFocusStep1() {
+function renderStep1() {
   step1.innerHTML = `
     <div class="section-title">
       <h2>Step 1 · Filters</h2>
@@ -617,7 +658,7 @@ function renderFocusStep1() {
 
   const savedBlock = document.createElement('div');
   savedBlock.className = 'filter-group';
-  savedBlock.innerHTML = `<h3>Saved Filter Sets</h3>`;
+  savedBlock.innerHTML = '<h3>Saved Filter Sets</h3>';
   const savedList = document.createElement('div');
   savedList.className = 'saved-filters';
   if (!state.savedFilters.length) {
@@ -631,8 +672,11 @@ function renderFocusStep1() {
       item.className = 'saved-filter';
       const content = document.createElement('div');
       content.className = 'saved-filter-content';
+      const competitorText = saved.competitors.length ? saved.competitors.join(', ') : 'All';
+      const techText = saved.tech.length ? saved.tech.join(', ') : 'All';
+      const sopText = saved.sopYear ? saved.sopYear : 'Any';
       content.innerHTML = `<strong>Set ${idx + 1}</strong>
-        <span>${saved.time.toUpperCase()} • ${saved.product} • ${saved.competitors.join(', ') || 'All'} • ${saved.tech.join(', ') || 'All'}</span>`;
+        <span>${saved.time.toUpperCase()} • ${saved.product} • ${competitorText} • ${techText} • SOP ${sopText}</span>`;
       const deleteBtn = document.createElement('button');
       deleteBtn.className = 'saved-filter-delete';
       deleteBtn.type = 'button';
@@ -648,7 +692,7 @@ function renderFocusStep1() {
             setTimeout(() => {
               state.savedFilters.splice(idx, 1);
               renderApp();
-              showToast('✅ Deleted successfully');
+              showToast('✅ Deleted successfully', 'success');
             }, 300);
           }
         });
@@ -656,6 +700,7 @@ function renderFocusStep1() {
       item.append(content, deleteBtn);
       item.addEventListener('click', () => {
         state.filters = deepClone(saved);
+        queueFilterToast();
         renderApp();
       });
       savedList.appendChild(item);
@@ -664,7 +709,6 @@ function renderFocusStep1() {
   savedBlock.appendChild(savedList);
   container.appendChild(savedBlock);
 
-  // Time buttons
   const timeGroup = document.createElement('div');
   timeGroup.className = 'filter-group';
   timeGroup.innerHTML = '<h3>Time Range</h3>';
@@ -676,6 +720,7 @@ function renderFocusStep1() {
     if (state.filters.time === key) btn.classList.add('active');
     btn.addEventListener('click', () => {
       state.filters.time = key;
+      queueFilterToast();
       renderApp();
     });
     timeButtons.appendChild(btn);
@@ -683,7 +728,6 @@ function renderFocusStep1() {
   timeGroup.appendChild(timeButtons);
   container.appendChild(timeGroup);
 
-  // Product radio
   const productGroup = document.createElement('div');
   productGroup.className = 'filter-group';
   productGroup.innerHTML = '<h3>Product</h3>';
@@ -698,6 +742,7 @@ function renderFocusStep1() {
     input.checked = state.filters.product === prod;
     input.addEventListener('change', () => {
       state.filters.product = prod;
+      queueFilterToast();
       renderApp();
     });
     label.appendChild(input);
@@ -709,7 +754,6 @@ function renderFocusStep1() {
   productGroup.appendChild(radios);
   container.appendChild(productGroup);
 
-  // Competitor chips
   const competitorGroup = document.createElement('div');
   competitorGroup.className = 'filter-group';
   competitorGroup.innerHTML = '<h3>Competitors</h3>';
@@ -723,10 +767,11 @@ function renderFocusStep1() {
     chip.addEventListener('click', () => {
       const idx = state.filters.competitors.indexOf(comp);
       if (idx >= 0) {
-      state.filters.competitors.splice(idx, 1);
+        state.filters.competitors.splice(idx, 1);
       } else {
         state.filters.competitors.push(comp);
       }
+      queueFilterToast();
       renderApp();
     });
     competitorChips.appendChild(chip);
@@ -734,7 +779,6 @@ function renderFocusStep1() {
   competitorGroup.appendChild(competitorChips);
   container.appendChild(competitorGroup);
 
-  // Tech chips
   const techGroup = document.createElement('div');
   techGroup.className = 'filter-group';
   techGroup.innerHTML = '<h3>Tech Params</h3>';
@@ -748,10 +792,11 @@ function renderFocusStep1() {
     chip.addEventListener('click', () => {
       const idx = state.filters.tech.indexOf(tech);
       if (idx >= 0) {
-    state.filters.tech.splice(idx, 1);
+        state.filters.tech.splice(idx, 1);
       } else {
         state.filters.tech.push(tech);
       }
+      queueFilterToast();
       renderApp();
     });
     techChips.appendChild(chip);
@@ -759,15 +804,16 @@ function renderFocusStep1() {
   techGroup.appendChild(techChips);
   container.appendChild(techGroup);
 
-  // More filters
   const moreGroup = document.createElement('div');
   moreGroup.className = 'filter-group';
   moreGroup.innerHTML = `
     <details>
       <summary>More Filters</summary>
+      <label>SOP Year</label>
+      <input type="number" value="${state.filters.sopYear ?? ''}" placeholder="Any" />
       <label>Customer</label>
       <input type="text" value="${state.filters.more.customer ?? ''}" placeholder="Any" />
-      <label>Volume Range</label>
+      <label>Volume</label>
       <input type="text" value="${state.filters.more.volume ?? ''}" placeholder="-" />
       <label>Business Terms</label>
       <input type="text" value="${state.filters.more.terms ?? ''}" placeholder="-" />
@@ -775,23 +821,26 @@ function renderFocusStep1() {
   `;
   const inputs = moreGroup.querySelectorAll('input');
   inputs[0].addEventListener('input', (e) => {
-    state.filters.more.customer = e.target.value || null;
+    state.filters.sopYear = e.target.value ? Number(e.target.value) : null;
   });
   inputs[1].addEventListener('input', (e) => {
-    state.filters.more.volume = e.target.value || null;
+    state.filters.more.customer = e.target.value || null;
   });
   inputs[2].addEventListener('input', (e) => {
+    state.filters.more.volume = e.target.value || null;
+  });
+  inputs[3].addEventListener('input', (e) => {
     state.filters.more.terms = e.target.value || null;
   });
   container.appendChild(moreGroup);
 
-  // Action buttons
   const actions = document.createElement('div');
   actions.className = 'step1-buttons';
   const filterBtn = document.createElement('button');
   filterBtn.textContent = 'Filter';
   filterBtn.className = 'primary';
   filterBtn.addEventListener('click', () => {
+    queueFilterToast();
     renderApp();
   });
   const resetBtn = document.createElement('button');
@@ -799,9 +848,10 @@ function renderFocusStep1() {
   resetBtn.className = 'ghost';
   resetBtn.addEventListener('click', () => {
     state.filters = deepClone(DEFAULT_FILTERS);
-    state.pinned.clear();
-    state.hidden.clear();
-    state.priceInfoCollapsed.clear();
+    state.expandedPriceSections.clear();
+    state.expandedBackgroundSections.clear();
+    state.chartSort = 'price';
+    queueFilterToast();
     renderApp();
   });
   const saveBtn = document.createElement('button');
@@ -817,22 +867,32 @@ function renderFocusStep1() {
   step1.appendChild(container);
 }
 
-function getFocusFilteredCases() {
-  const filtered = caseDataset.filter((item) => matchesFilters(item, state.filters));
-  return filtered.filter((item) => !state.hidden.has(item.id));
-}
+const chartPalette = ['#0B5CFF', '#3B82F6', '#6366F1', '#F59E0B', '#EF4444', '#10B981', '#14B8A6', '#8B5CF6', '#EC4899', '#F97316', '#1D4ED8', '#0EA5E9'];
+const LOWEST_LINE_COLOR = '#FFD60A';
 
-function getFocusVisibleCases() {
-  const filtered = getFocusFilteredCases();
-  const pinnedCases = caseDataset.filter((item) => state.pinned.has(item.id) && !state.hidden.has(item.id));
-  const map = new Map();
-  [...pinnedCases, ...filtered].forEach((item) => {
-    map.set(item.id, item);
-  });
-  return Array.from(map.values()).sort((a, b) => (a.leadDate < b.leadDate ? 1 : -1));
-}
+const lowestLineGlow = {
+  id: 'lowestLineGlow',
+  afterDatasetsDraw(chart) {
+    const ctx = chart.ctx;
+    chart.data.datasets.forEach((dataset, index) => {
+      if (!dataset.isLowest) return;
+      const meta = chart.getDatasetMeta(index);
+      if (!meta || meta.hidden) return;
+      ctx.save();
+      ctx.shadowColor = 'rgba(255, 214, 10, 0.8)';
+      ctx.shadowBlur = 16;
+      ctx.lineJoin = 'round';
+      ctx.lineCap = 'round';
+      ctx.lineWidth = dataset.borderWidth;
+      ctx.strokeStyle = dataset.borderColor;
+      ctx.beginPath();
+      meta.dataset.draw(ctx);
+      ctx.restore();
+    });
+  }
+};
 
-function renderFocusStep2() {
+function renderStep2({ chartCases, total }) {
   step2.innerHTML = '';
   const container = document.createElement('div');
   container.innerHTML = `
@@ -843,26 +903,71 @@ function renderFocusStep2() {
   `;
   const tagsRow = createTagRow(buildFocusTags());
   container.appendChild(tagsRow);
+
+  const feedback = document.createElement('div');
+  feedback.className = 'result-feedback';
+  const countLine = document.createElement('div');
+  countLine.className = 'result-count';
+  countLine.textContent = `🎯 ${total} results found for current filters.`;
+  feedback.appendChild(countLine);
+  if (total > 12) {
+    const warnLine = document.createElement('div');
+    warnLine.className = 'result-warning';
+    warnLine.innerHTML = `<span class="pulse-icon">⚠️</span> Chart displays only 12 lines due to visualization limit. Please refine filters or enable advanced filtering.`;
+    feedback.appendChild(warnLine);
+  }
+  container.appendChild(feedback);
+
+  if (total > 12) {
+    const sortBar = document.createElement('div');
+    sortBar.className = 'sort-toggle';
+    sortBar.innerHTML = `
+      <span class="mode-hint">Sort visible lines:</span>
+      <div class="sort-buttons">
+        <button type="button" data-sort="recent" ${state.chartSort === 'recent' ? 'class="active"' : ''}>By Recent Lead</button>
+        <button type="button" data-sort="price" ${state.chartSort === 'price' ? 'class="active"' : ''}>By Price Ascending</button>
+      </div>
+    `;
+    sortBar.querySelectorAll('[data-sort]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const value = btn.getAttribute('data-sort');
+        if (state.chartSort !== value) {
+          state.chartSort = value;
+          queueFilterToast();
+          renderApp();
+        }
+      });
+    });
+    container.appendChild(sortBar);
+  }
+
   const chartHolder = document.createElement('div');
   chartHolder.className = 'chart-container';
   chartHolder.innerHTML = '<canvas id="priceChart"></canvas>';
   container.appendChild(chartHolder);
+
   const minTableContainer = document.createElement('div');
   minTableContainer.className = 'min-price-table-container hidden';
   container.appendChild(minTableContainer);
+
   const legendNote = document.createElement('div');
   legendNote.className = 'legend-note';
-  legendNote.textContent = 'Click lines or legend items to focus and open details. Latest 10 leads shown when dataset exceeds limit.';
+  legendNote.textContent = 'Hover or tap to focus a case. Click the legend to isolate a line and open its details.';
   container.appendChild(legendNote);
+
   step2.appendChild(container);
 
-  const filtered = getFocusFilteredCases().sort((a, b) => (a.leadDate < b.leadDate ? 1 : -1));
-  const latestCases = filtered.slice(0, 10);
-  if (filtered.length > 10 && !state.dontShowHint) {
-    showChartHint(filtered.length);
+  const toastKey = `${total > 12 ? 'limit' : 'all'}-${total}`;
+  if (state.lastToastType !== toastKey) {
+    if (total > 12) {
+      showToast('⚠️ Chart shows only 12 lines', 'warning');
+    } else {
+      showToast('✅ All results displayed', 'info');
+    }
+    state.lastToastType = toastKey;
   }
 
-  if (!latestCases.length) {
+  if (!chartCases.length) {
     chartHolder.innerHTML = '<div class="mode-hint">No cases found for the current filters.</div>';
     minTableContainer.innerHTML = '';
     minTableContainer.classList.add('hidden');
@@ -874,9 +979,12 @@ function renderFocusStep2() {
   }
 
   const ctx = document.getElementById('priceChart');
-  const datasets = latestCases.map((item, idx) => {
-    const years = Object.keys(item.prices).map((year) => Number(year));
+  const datasets = chartCases.map((item, idx) => {
+    const years = Object.keys(item.prices)
+      .map((year) => Number(year))
+      .sort((a, b) => a - b);
     const baseColor = chartPalette[idx % chartPalette.length];
+    const minValue = Math.min(...years.map((year) => item.prices[year]));
     return {
       label: `${item.client} – ${item.project} – ${item.product} – ${item.sopYear}`,
       data: years.map((year) => ({ x: year, y: item.prices[year] })),
@@ -887,9 +995,22 @@ function renderFocusStep2() {
       borderColor: baseColor,
       backgroundColor: baseColor,
       caseId: item.id,
-      baseColor
+      baseColor,
+      minValue
     };
   });
+
+  const lowest = datasets.reduce((acc, curr) => (acc && acc.minValue <= curr.minValue ? acc : curr), null);
+  if (lowest) {
+    datasets.forEach((dataset) => {
+      dataset.isLowest = dataset === lowest;
+      if (dataset.isLowest) {
+        dataset.borderWidth = 4;
+        dataset.borderColor = LOWEST_LINE_COLOR;
+        dataset.backgroundColor = LOWEST_LINE_COLOR;
+      }
+    });
+  }
 
   if (state.chartInstance) state.chartInstance.destroy();
   const defaultLegendClick = Chart.defaults.plugins.legend.onClick;
@@ -900,8 +1021,8 @@ function renderFocusStep2() {
       responsive: true,
       maintainAspectRatio: true,
       aspectRatio: 2.5,
-      interaction: { mode: 'nearest', intersect: false },
       parsing: false,
+      interaction: { mode: 'nearest', intersect: false },
       scales: {
         x: {
           type: 'linear',
@@ -915,12 +1036,22 @@ function renderFocusStep2() {
       plugins: {
         legend: {
           position: 'bottom',
-          labels: { usePointStyle: true },
+          labels: {
+            usePointStyle: true,
+            color: (ctx) => {
+              const dataset = ctx?.chart?.data?.datasets?.[ctx.datasetIndex];
+              return dataset && dataset.isLowest ? '#0B5CFF' : '#1f2933';
+            },
+            font: (ctx) => {
+              const dataset = ctx?.chart?.data?.datasets?.[ctx.datasetIndex];
+              return { size: 12, weight: dataset && dataset.isLowest ? '700' : '500' };
+            }
+          },
           onClick: (evt, legendItem, legend) => {
             defaultLegendClick.call(legend.chart, evt, legendItem, legend);
             const dataset = legend.chart.data.datasets[legendItem.datasetIndex];
             highlightCase(dataset.caseId);
-            updateMinPriceTable(state.chartInstance, minTableContainer, state.mode === 'focus');
+            updateMinPriceTable(state.chartInstance, minTableContainer, true);
           },
           onHover: (evt, legendItem, legend) => {
             if (evt?.native?.target) {
@@ -928,17 +1059,19 @@ function renderFocusStep2() {
             }
             applyChartFocus(legend.chart, legendItem.datasetIndex);
           },
-          onLeave: (evt, legendItem, legend) => {
-            applyChartFocus(legend.chart, null);
+          onLeave: () => {
+            applyChartFocus(state.chartInstance, null);
           }
         },
         tooltip: {
           callbacks: {
             title: () => '',
             label: (ctx) => {
-              const dataset = ctx.dataset;
-              const item = caseDataset.find((c) => c.id === dataset.caseId);
-              return `${item.client} ${item.project} | SOP ${item.sopYear} : ${ctx.parsed.y} CNY`;
+              const dataset = ctx.dataset || {};
+              const item = dataset.caseId ? getCaseById(dataset.caseId) : null;
+              if (!item) return '';
+              const prefix = dataset.isLowest ? '🟡 Lowest Price Case · ' : '';
+              return `${prefix}${item.client} ${item.project} | SOP ${item.sopYear} : ${ctx.parsed.y} CNY`;
             }
           }
         }
@@ -959,13 +1092,13 @@ function renderFocusStep2() {
           applyChartFocus(state.chartInstance, null);
         }
       }
-    }
+    },
+    plugins: [lowestLineGlow]
   });
-  applyChartFocus(state.chartInstance, null);
-  updateMinPriceTable(state.chartInstance, minTableContainer, state.mode === 'focus');
-}
 
-const chartPalette = ['#0B5CFF', '#3B82F6', '#6366F1', '#F59E0B', '#EF4444', '#10B981', '#14B8A6', '#8B5CF6', '#EC4899', '#F97316'];
+  applyChartFocus(state.chartInstance, null);
+  updateMinPriceTable(state.chartInstance, minTableContainer, true);
+}
 
 function hexToRgba(hex, alpha = 1) {
   const bigint = parseInt(hex.replace('#', ''), 16);
@@ -979,17 +1112,19 @@ function applyChartFocus(chart, focusIndex) {
   if (!chart) return;
   chart.data.datasets.forEach((dataset, idx) => {
     const isActive = focusIndex === null || focusIndex === idx;
-    const alpha = isActive ? 1 : 0.3;
-    dataset.borderColor = hexToRgba(dataset.baseColor, alpha);
-    dataset.backgroundColor = hexToRgba(dataset.baseColor, alpha);
-    dataset.borderWidth = isActive && focusIndex !== null ? 3 : 2;
+    const baseColor = dataset.isLowest ? LOWEST_LINE_COLOR : dataset.baseColor;
+    const alpha = dataset.isLowest ? 1 : isActive ? 1 : 0.3;
+    const computedColor = dataset.isLowest ? baseColor : hexToRgba(baseColor, alpha);
+    dataset.borderColor = computedColor;
+    dataset.backgroundColor = dataset.isLowest ? baseColor : computedColor;
+    dataset.borderWidth = dataset.isLowest ? 4 : isActive && focusIndex !== null ? 3 : 2;
   });
   chart.update('none');
 }
 
-function updateMinPriceTable(chart, container, isFindPricesMode) {
+function updateMinPriceTable(chart, container, shouldDisplay) {
   if (!container) return;
-  if (!isFindPricesMode || !chart) {
+  if (!shouldDisplay || !chart) {
     container.innerHTML = '';
     container.classList.add('hidden');
     container.style.opacity = 1;
@@ -998,9 +1133,9 @@ function updateMinPriceTable(chart, container, isFindPricesMode) {
 
   const allYears = new Set();
   chart.data.datasets.forEach((dataset) => {
-    dataset.data.forEach((point, index) => {
+    dataset.data.forEach((point) => {
       if (!point) return;
-      const yearValue = typeof point.x === 'number' ? point.x : Array.isArray(chart.data.labels) ? chart.data.labels[index] : null;
+      const yearValue = typeof point.x === 'number' ? point.x : null;
       if (yearValue !== null && yearValue !== undefined) {
         allYears.add(Math.round(yearValue));
       }
@@ -1040,12 +1175,11 @@ function updateMinPriceTable(chart, container, isFindPricesMode) {
   });
 
   const table = document.createElement('table');
-  table.className = 'min-price-table';
-
+  table.className = 'min-price-table visible';
   const headerRow = document.createElement('tr');
-  const headerLabel = document.createElement('th');
-  headerLabel.textContent = 'Year';
-  headerRow.appendChild(headerLabel);
+  const headerCell = document.createElement('th');
+  headerCell.textContent = 'Year';
+  headerRow.appendChild(headerCell);
   sortedYears.forEach((year) => {
     const th = document.createElement('th');
     th.textContent = year;
@@ -1054,26 +1188,20 @@ function updateMinPriceTable(chart, container, isFindPricesMode) {
   table.appendChild(headerRow);
 
   const dataRow = document.createElement('tr');
-  const dataLabel = document.createElement('th');
-  dataLabel.textContent = 'Min Price (CNY)';
-  dataRow.appendChild(dataLabel);
-
+  const labelCell = document.createElement('th');
+  labelCell.textContent = 'Min Price (CNY)';
+  dataRow.appendChild(labelCell);
   sortedYears.forEach((year) => {
+    const value = minValues[year];
     const cell = document.createElement('td');
-    const minValue = minValues[year];
-    if (minValue === Infinity) {
-      cell.classList.add('empty');
+    if (value === Infinity) {
       cell.textContent = '—';
+      cell.className = 'empty';
     } else {
-      const rounded = Math.round(minValue);
-      cell.textContent = rounded;
-      const cases = Array.from(casesByYear[year]);
-      if (cases.length) {
-        const tooltipLines = [`Year ${year}: Min ${rounded} CNY`, 'Cases:'];
-        cases.forEach((c) => tooltipLines.push(c));
-        cell.title = tooltipLines.join('\n');
-      } else {
-        cell.title = `Year ${year}: Min ${rounded} CNY`;
+      cell.textContent = Math.round(value);
+      const contributing = Array.from(casesByYear[year]);
+      if (contributing.length) {
+        cell.title = `Year ${year}: Min ${Math.round(value)} CNY\nCases:\n${contributing.join('\n')}`;
       }
     }
     dataRow.appendChild(cell);
@@ -1089,655 +1217,133 @@ function updateMinPriceTable(chart, container, isFindPricesMode) {
   });
 }
 
-function showChartHint(total) {
-  const modal = document.getElementById('chartHintModal');
-  hideHintCheckbox.checked = state.dontShowHint;
-  modal.classList.remove('hidden');
-  document.getElementById('datasetCount').textContent = total;
-  setTimeout(() => {
-    if (!state.dontShowHint) {
-      modal.classList.add('hidden');
-    }
-  }, 5000);
-}
-
-// -----------------------------
-// Explore Mode Rendering
-// -----------------------------
-function activateExploreSegment(segment, options = {}) {
-  state.exploreSegment = segment;
-  state.filters = {
-    time: '6m',
-    product: segment.filter.product,
-    competitors: segment.filter.competitors ?? [],
-    tech: segment.filter.tech ?? [],
-    more: { customer: null, volume: null, terms: null }
-  };
-  state.mode = 'explore';
-  if (options.popularName) {
-    state.activePopularSegment = options.popularName;
-  } else {
-    state.activePopularSegment = null;
-  }
-  renderApp();
-}
-
-function renderExploreStep1() {
-  step1.innerHTML = `
-    <div class="section-title">
-      <h2>Step 1 · Segments</h2>
-      <span class="mode-hint">Pick a segment or snapshot to explore fresh leads.</span>
-    </div>
-  `;
-  const container = document.createElement('div');
-  container.className = 'segment-section';
-
-  const monthNav = document.createElement('div');
-  monthNav.className = 'month-nav';
-  const prevBtn = document.createElement('button');
-  prevBtn.textContent = '◀';
-  prevBtn.addEventListener('click', () => {
-    shiftMonth(-1);
-  });
-  const nextBtn = document.createElement('button');
-  nextBtn.textContent = '▶';
-  nextBtn.addEventListener('click', () => {
-    shiftMonth(1);
-  });
-  const monthLabel = document.createElement('div');
-  monthLabel.innerHTML = `<strong>${formatMonth(state.exploreMonth)}</strong>`;
-  const select = document.createElement('select');
-  segmentConfig.months.forEach((month) => {
-    const option = document.createElement('option');
-    option.value = month;
-    option.textContent = formatMonth(month);
-    if (month === state.exploreMonth) option.selected = true;
-    select.appendChild(option);
-  });
-  select.addEventListener('change', (e) => {
-    state.exploreMonth = e.target.value;
-    renderApp();
-  });
-  monthNav.append(prevBtn, monthLabel, nextBtn, select);
-  container.appendChild(monthNav);
-  const buildSegmentCard = (segment, { deletable = false } = {}) => {
-    const row = document.createElement('div');
-    row.className = 'segment-card';
-    if (state.exploreSegment?.id === segment.id) {
-      row.classList.add('active');
-    }
-    const info = document.createElement('div');
-    info.className = 'segment-card-info';
-    info.innerHTML = `<strong>${segment.name}</strong><span>${segment.summary}</span>`;
-    const actions = document.createElement('div');
-    actions.className = 'segment-card-actions';
-    const useBtn = document.createElement('button');
-    useBtn.type = 'button';
-    useBtn.className = 'segment-find';
-    useBtn.textContent = '查找';
-    useBtn.addEventListener('click', () => {
-      state.flashSegmentName = null;
-      activateExploreSegment(segment);
-    });
-    actions.appendChild(useBtn);
-    if (deletable) {
-      const delBtn = document.createElement('button');
-      delBtn.type = 'button';
-      delBtn.className = 'segment-delete';
-      delBtn.textContent = '❌';
-      delBtn.addEventListener('click', (event) => {
-        event.stopPropagation();
-        openConfirm({
-          message: 'Are you sure you want to delete this segment?',
-          confirmLabel: 'Delete',
-          onConfirm: () => {
-            row.classList.add('is-deleting');
-            setTimeout(() => {
-              segmentConfig.mySegments = segmentConfig.mySegments.filter((s) => s.id !== segment.id);
-              if (state.exploreSegment?.id === segment.id) {
-                state.exploreSegment = null;
-                state.activePopularSegment = null;
-              }
-              showToast('✅ Segment deleted');
-              renderApp();
-            }, 300);
-          }
-        });
-      });
-      actions.appendChild(delBtn);
-    }
-    row.append(info, actions);
-    row.addEventListener('click', (event) => {
-      if (event.target.closest('button')) return;
-      useBtn.click();
-    });
-    return row;
-  };
-
-  const renderGroup = (key, title, segments, options = {}) => {
-    const group = document.createElement('div');
-    group.className = 'segment-group';
-    const header = document.createElement('button');
-    header.type = 'button';
-    header.className = 'collapsible-header';
-    if (state.segmentGroupOpen[key] === undefined) {
-      state.segmentGroupOpen[key] = true;
-    }
-    const expanded = state.segmentGroupOpen[key];
-    header.setAttribute('aria-expanded', String(expanded));
-    header.innerHTML = `<span>${title}</span><span class="chevron" aria-hidden="true">▸</span>`;
-    header.addEventListener('click', () => {
-      state.segmentGroupOpen[key] = !state.segmentGroupOpen[key];
-      renderExploreStep1();
-    });
-    group.appendChild(header);
-    const body = document.createElement('div');
-    body.className = 'collapsible-body segment-card-list';
-    if (!segments.length) {
-      const empty = document.createElement('div');
-      empty.className = 'mode-hint';
-      empty.textContent = options.deletable ? 'No saved segments yet.' : 'No segments available.';
-      body.appendChild(empty);
-    } else {
-      segments.forEach((segment) => {
-        const card = buildSegmentCard(segment, { deletable: options.deletable });
-        body.appendChild(card);
-      });
-    }
-    group.appendChild(body);
-    container.appendChild(group);
-    requestAnimationFrame(() => {
-      body.style.maxHeight = expanded ? `${body.scrollHeight}px` : '0px';
-      group.classList.toggle('expanded', expanded);
-    });
-  };
-
-  renderGroup('predefined', 'Predefined Segments', segmentConfig.predefined);
-  renderGroup('mine', 'My Segments', segmentConfig.mySegments, { deletable: true });
-
-  const customGroup = document.createElement('div');
-  customGroup.className = 'segment-group custom-segment';
-  const customHeader = document.createElement('button');
-  customHeader.type = 'button';
-  customHeader.className = 'collapsible-header';
-  customHeader.innerHTML = `<span>Create Custom Segment</span><span class="chevron" aria-hidden="true">▸</span>`;
-  customHeader.setAttribute('aria-expanded', String(state.customSegmentOpen));
-  customHeader.addEventListener('click', () => {
-    state.customSegmentOpen = !state.customSegmentOpen;
-    renderExploreStep1();
-  });
-  customGroup.appendChild(customHeader);
-  const customBody = document.createElement('div');
-  customBody.className = 'collapsible-body custom-segment-body';
-
-  const nameLabel = document.createElement('label');
-  nameLabel.textContent = 'Segment Name';
-  const nameInput = document.createElement('input');
-  nameInput.type = 'text';
-  nameInput.id = 'customSegmentName';
-  nameInput.placeholder = 'My Watchlist';
-  const grid = document.createElement('div');
-  grid.className = 'custom-segment-grid';
-
-  const productGroup = document.createElement('div');
-  productGroup.className = 'custom-field';
-  productGroup.innerHTML = '<span>产品</span>';
-  const productSelect = document.createElement('select');
-  productSelect.id = 'customSegmentProduct';
-  ['IPB', 'ESP', 'iBooster'].forEach((prod) => {
-    const option = document.createElement('option');
-    option.value = prod;
-    option.textContent = prod;
-    productSelect.appendChild(option);
-  });
-  productGroup.appendChild(productSelect);
-
-  const competitorGroup = document.createElement('div');
-  competitorGroup.className = 'custom-field';
-  competitorGroup.innerHTML = '<span>对手</span>';
-  const competitorWrap = document.createElement('div');
-  competitorWrap.className = 'chips';
-  ['Bosch', 'Conti', 'BTL', 'ZF'].forEach((comp) => {
-    const chip = document.createElement('div');
-    chip.className = 'chip';
-    chip.textContent = comp;
-    chip.addEventListener('click', () => {
-      if (chip.classList.contains('active')) {
-        chip.classList.remove('active');
-      } else {
-        chip.classList.add('active');
-      }
-    });
-    competitorWrap.appendChild(chip);
-  });
-  competitorGroup.appendChild(competitorWrap);
-
-  const techGroup = document.createElement('div');
-  techGroup.className = 'custom-field span-2';
-  techGroup.innerHTML = '<span>技术参数</span>';
-  const techWrap = document.createElement('div');
-  techWrap.className = 'chips';
-  ['RoPP41', 'APB-Mi', 'iTPMs', 'WOP', 'RSV'].forEach((tech) => {
-    const chip = document.createElement('div');
-    chip.className = 'chip';
-    chip.textContent = tech;
-    chip.addEventListener('click', () => {
-      chip.classList.toggle('active');
-    });
-    techWrap.appendChild(chip);
-  });
-  techGroup.appendChild(techWrap);
-
-  grid.append(productGroup, competitorGroup, techGroup);
-
-  const actionBar = document.createElement('div');
-  actionBar.className = 'segment-actions';
-  const saveBtn = document.createElement('button');
-  saveBtn.type = 'button';
-  saveBtn.className = 'primary';
-  saveBtn.textContent = '⭐ Save Segment';
-  const useBtn = document.createElement('button');
-  useBtn.type = 'button';
-  useBtn.className = 'ghost';
-  useBtn.textContent = 'Use Now';
-  actionBar.append(saveBtn, useBtn);
-
-  customBody.append(nameLabel, nameInput, grid, actionBar);
-  customGroup.appendChild(customBody);
-  container.appendChild(customGroup);
-
-  const popularGroup = document.createElement('div');
-  popularGroup.className = 'segment-group popular-segments';
-  const popularHeader = document.createElement('h4');
-  popularHeader.textContent = 'Top 10 Popular Segments';
-  popularGroup.appendChild(popularHeader);
-  segmentConfig.popular.forEach((item) => {
-    const row = document.createElement('div');
-    row.className = 'popular-row';
-    row.dataset.popular = item.name;
-    row.innerHTML = `<span>${item.name}</span><span>Score ${item.score}</span>`;
-    if (state.activePopularSegment === item.name) {
-      row.classList.add('active');
-    }
-    if (state.flashSegmentName === item.name) {
-      row.classList.add('flash');
-      setTimeout(() => {
-        row.classList.remove('flash');
-        if (state.flashSegmentName === item.name) {
-          state.flashSegmentName = null;
-        }
-      }, 320);
-    }
-    row.addEventListener('click', () => {
-      state.flashSegmentName = item.name;
-      showToast(`🔍 Segment "${item.name}" loaded`);
-      activateExploreSegment(
-        {
-          id: `popular-${item.name}`,
-          name: item.name,
-          summary: '热门 Segment',
-          filter: item.filter
-        },
-        { popularName: item.name }
-      );
-    });
-    popularGroup.appendChild(row);
-  });
-  container.appendChild(popularGroup);
-
-  step1.appendChild(container);
-
-  const getCustomValues = () => {
-    const competitors = Array.from(competitorWrap.querySelectorAll('.chip.active')).map((chip) => chip.textContent);
-    const tech = Array.from(techWrap.querySelectorAll('.chip.active')).map((chip) => chip.textContent);
-    const name = nameInput.value || 'Untitled Segment';
-    return { product: productSelect.value, competitors, tech, name };
-  };
-
-  const persistSegment = (values, toastMessage) => {
-    const segment = {
-      id: `segment-${Date.now()}`,
-      name: values.name,
-      summary: '新增 +0 ｜ 新低 0',
-      filter: { product: values.product, competitors: values.competitors, tech: values.tech }
-    };
-    segmentConfig.mySegments.unshift(segment);
-    showToast(toastMessage);
-    state.segmentGroupOpen.mine = true;
-    renderApp();
-  };
-
-  saveBtn.addEventListener('click', () => {
-    const values = getCustomValues();
-    persistSegment(values, '💾 Saved to My Segments');
-  });
-
-  useBtn.addEventListener('click', () => {
-    const values = getCustomValues();
-    const segment = {
-      id: `custom-${Date.now()}`,
-      name: values.name,
-      summary: '自定义筛选',
-      filter: { product: values.product, competitors: values.competitors, tech: values.tech }
-    };
-    showToast(`🔍 Segment "${segment.name}" loaded`);
-    activateExploreSegment(segment);
-  });
-
-  requestAnimationFrame(() => {
-    customBody.style.maxHeight = state.customSegmentOpen ? `${customBody.scrollHeight}px` : '0px';
-    customGroup.classList.toggle('expanded', state.customSegmentOpen);
-  });
-}
-
-function shiftMonth(delta) {
-  const idx = segmentConfig.months.indexOf(state.exploreMonth);
-  const nextIdx = Math.min(Math.max(idx + delta, 0), segmentConfig.months.length - 1);
-  state.exploreMonth = segmentConfig.months[nextIdx];
-  renderApp();
-}
-
-function formatMonth(month) {
-  const [year, mo] = month.split('-');
-  return `${year}年${mo}月`;
-}
-
-function matchesSegment(item, segmentFilter) {
-  if (!segmentFilter) return true;
-  if (segmentFilter.product && item.product !== segmentFilter.product) return false;
-  if (segmentFilter.competitors?.length && !segmentFilter.competitors.includes(item.competitor)) return false;
-  if (segmentFilter.tech?.length && !segmentFilter.tech.some((tech) => item.tech.includes(tech))) return false;
-  return true;
-}
-
-function getExploreCases() {
-  return caseDataset
-    .filter(
-      (item) =>
-        item.leadMonth === state.exploreMonth &&
-        matchesSegment(item, getActiveExploreFilter()) &&
-        !state.hidden.has(item.id)
-    )
-    .sort((a, b) => (a.leadDate < b.leadDate ? 1 : -1));
-}
-
-function shiftMonthString(month, delta) {
-  const date = parseMonth(month);
-  date.setMonth(date.getMonth() + delta);
-  const y = date.getFullYear();
-  const m = `${date.getMonth() + 1}`.padStart(2, '0');
-  const candidate = `${y}-${m}`;
-  return segmentConfig.months.includes(candidate) ? candidate : null;
-}
-
-function getQuarterMonths(month) {
-  const date = parseMonth(month);
-  const quarterStart = date.getMonth() - (date.getMonth() % 3);
-  const months = [];
-  for (let i = 0; i < 3; i++) {
-    const temp = new Date(date);
-    temp.setMonth(quarterStart + i);
-    const y = temp.getFullYear();
-    const m = `${temp.getMonth() + 1}`.padStart(2, '0');
-    const candidate = `${y}-${m}`;
-    if (segmentConfig.months.includes(candidate)) {
-      months.push(candidate);
-    }
-  }
-  return months;
-}
-
-function aggregateCasesBySubmitter(months, segmentFilter) {
-  const counts = new Map();
-  caseDataset.forEach((item) => {
-    if (!months.includes(item.leadMonth)) return;
-    if (state.hidden.has(item.id)) return;
-    if (!matchesSegment(item, segmentFilter)) return;
-    counts.set(item.submitter, (counts.get(item.submitter) || 0) + 1);
-  });
-  return counts;
-}
-
-function computeLeaderboard(scope) {
-  const segmentFilter = getActiveExploreFilter();
-  const currentMonths = scope === 'monthly' ? [state.exploreMonth] : getQuarterMonths(state.exploreMonth);
-  const previousAnchor = scope === 'monthly' ? shiftMonthString(state.exploreMonth, -1) : shiftMonthString(state.exploreMonth, -3);
-  const previousMonths = previousAnchor ? (scope === 'monthly' ? [previousAnchor] : getQuarterMonths(previousAnchor)) : [];
-
-  const currentCounts = aggregateCasesBySubmitter(currentMonths, segmentFilter);
-  const previousCounts = previousMonths.length ? aggregateCasesBySubmitter(previousMonths, segmentFilter) : new Map();
-
-  const sorted = [...currentCounts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 10);
-  if (!sorted.length) {
-    return segmentConfig.leaderboard[scope].map((item) => ({ ...item }));
-  }
-
-  return sorted.map(([user, count], index) => {
-    const prev = previousCounts.get(user) || 0;
-    let trend = '→';
-    if (count > prev) trend = `↑${count - prev}`;
-    if (count < prev) trend = `↓${prev - count}`;
-    return { rank: index + 1, user, count, trend };
-  });
-}
-
-function renderExploreStep2() {
-  step2.innerHTML = `
-    <div class="section-title">
-      <h2>Step 2 · Incremental Overview</h2>
-      <span class="mode-hint">Track new records by severity level.</span>
-    </div>
-  `;
-  const container = document.createElement('div');
-  container.className = 'incremental';
-  const tagsRow = createTagRow(buildExploreTags());
-  container.appendChild(tagsRow);
-  const kpis = document.createElement('div');
-  kpis.className = 'kpi-summary';
-  const cases = getExploreCases();
-  const tierCounts = { L1: 0, L2: 0, L3: 0 };
-  cases.forEach((item) => tierCounts[item.tier]++);
-  kpis.textContent = `This Month: +${cases.length} new | ${tierCounts.L2} broke competitor lows | ${tierCounts.L3} broke product lows`;
-  container.appendChild(kpis);
-
-  if (!cases.length) {
-    const empty = document.createElement('p');
-    empty.className = 'mode-hint';
-    empty.textContent = 'No cases found for the selected month and segment.';
-    container.appendChild(empty);
-  }
-
-  const tiers = [
-    { key: 'L3', title: '🟥 L3 – New record low for product category', color: 'l3' },
-    { key: 'L2', title: '🟨 L2 – New record low vs competitor', color: 'l2' },
-    { key: 'L1', title: '🩶 L1 – Normal new additions', color: 'l1' }
-  ];
-
-  tiers.forEach((tier) => {
-    const section = document.createElement('div');
-    section.className = `incremental-section tier-${tier.key.toLowerCase()}`;
-    const header = document.createElement('button');
-    header.type = 'button';
-    header.className = 'collapsible-header';
-    const expanded = state.exploreExpanded[tier.key];
-    header.setAttribute('aria-expanded', String(expanded));
-    header.innerHTML = `<span>${tier.title}</span><span class="chevron" aria-hidden="true">▸</span>`;
-    header.addEventListener('click', () => {
-      state.exploreExpanded[tier.key] = !state.exploreExpanded[tier.key];
-      renderExploreStep2();
-      renderDetailCards(getExploreCases());
-    });
-    section.appendChild(header);
-
-    const list = document.createElement('ul');
-    list.className = 'collapsible-body incremental-list';
-    cases.filter((c) => c.tier === tier.key).forEach((item) => {
-      const li = document.createElement('li');
-      li.innerHTML = `<h5>${item.sopPrice} CNY <span class="tag ${tier.key.toLowerCase()}">${tier.key}</span></h5>
-        <div>${item.client} – ${item.project} – ${item.product} ｜ SOP ${item.sopYear}</div>
-        <span>Lead Month: ${formatMonth(item.leadMonth)}</span>`;
-      li.addEventListener('click', () => highlightCase(item.id));
-      list.appendChild(li);
-    });
-    section.appendChild(list);
-    container.appendChild(section);
-    requestAnimationFrame(() => {
-      list.style.maxHeight = expanded ? `${list.scrollHeight}px` : '0px';
-      header.setAttribute('aria-expanded', String(expanded));
-      section.classList.toggle('expanded', expanded);
-    });
-  });
-
-  const leaderboardContainer = document.createElement('div');
-  leaderboardContainer.className = 'leaderboard-container';
-  const toggle = document.createElement('button');
-  toggle.className = 'leaderboard-toggle';
-  toggle.type = 'button';
-  toggle.innerHTML = state.leaderboardExpanded ? '▾ 收起贡献榜' : '▸ 查看贡献榜';
-  toggle.addEventListener('click', () => {
-    state.leaderboardExpanded = !state.leaderboardExpanded;
-    renderApp();
-  });
-  leaderboardContainer.appendChild(toggle);
-
-  if (state.leaderboardExpanded) {
-    const panel = document.createElement('div');
-    panel.className = 'leaderboard-panel';
-    const scope = document.createElement('div');
-    scope.className = 'leaderboard-scope';
-    ['monthly', 'quarterly'].forEach((key) => {
-      const scopeBtn = document.createElement('button');
-      scopeBtn.textContent = key === 'monthly' ? 'Monthly' : 'Quarterly';
-      scopeBtn.type = 'button';
-      if (state.exploreSnapshot === key) scopeBtn.classList.add('active');
-      scopeBtn.addEventListener('click', () => {
-        state.exploreSnapshot = key;
-        renderApp();
-      });
-      scope.appendChild(scopeBtn);
-    });
-    panel.appendChild(scope);
-
-    const lbList = document.createElement('div');
-    lbList.className = 'leaderboard-list';
-    computeLeaderboard(state.exploreSnapshot).forEach((item) => {
-      const row = document.createElement('div');
-      row.className = 'leaderboard-row';
-      row.innerHTML = `<span>#${item.rank} ${item.user}</span><span>${item.count} cases ｜ ${item.trend}</span>`;
-      lbList.appendChild(row);
-    });
-    panel.appendChild(lbList);
-    leaderboardContainer.appendChild(panel);
-  }
-
-  container.appendChild(leaderboardContainer);
-
-  step2.appendChild(container);
-}
-
-// -----------------------------
-// Shared Detail Cards
-// -----------------------------
-function renderDetailCards(cases) {
+function renderStep3(cases) {
   step3.innerHTML = `
     <div class="section-title">
-      <h2>Step 3 · Case Detail Cards</h2>
-      <span class="mode-hint">Pinned cases stay even if filters change.</span>
+      <h2>Step 3 · Case Details</h2>
+      <span class="mode-hint">Review the selected leads.</span>
     </div>
   `;
   const panel = document.createElement('div');
   panel.className = 'details-panel';
-  const resetBar = document.createElement('div');
-  resetBar.className = 'detail-reset';
-  const resetButton = document.createElement('button');
-  resetButton.textContent = 'Reset Pins & Hides';
-  resetButton.addEventListener('click', () => {
-    state.pinned.clear();
-    state.hidden.clear();
-    state.priceInfoCollapsed.clear();
-    renderApp();
-  });
-  resetBar.appendChild(resetButton);
-  panel.appendChild(resetBar);
   const container = document.createElement('div');
   container.className = 'detail-cards';
+
+  if (!cases.length) {
+    const empty = document.createElement('div');
+    empty.className = 'mode-hint';
+    empty.textContent = 'Adjust filters or load a new message to see case details.';
+    panel.appendChild(empty);
+    step3.appendChild(panel);
+    return;
+  }
+
+  const visibleIds = new Set(cases.map((item) => item.id));
+  [...state.expandedPriceSections].forEach((id) => {
+    if (!visibleIds.has(id)) state.expandedPriceSections.delete(id);
+  });
+  [...state.expandedBackgroundSections].forEach((id) => {
+    if (!visibleIds.has(id)) state.expandedBackgroundSections.delete(id);
+  });
+
+  const buildCollapsible = (title, expandedSet, id, contentBuilder) => {
+    const isExpanded = expandedSet.has(id);
+    const section = document.createElement('section');
+    section.className = `info-section collapsible ${isExpanded ? 'expanded' : 'collapsed'}`;
+    const headerBtn = document.createElement('button');
+    headerBtn.type = 'button';
+    headerBtn.className = 'section-header';
+    headerBtn.innerHTML = `<span>${title}</span><span class="chevron" aria-hidden="true">▸</span>`;
+    const body = document.createElement('div');
+    body.className = 'section-body';
+    body.innerHTML = contentBuilder();
+    section.append(headerBtn, body);
+
+    const applyState = (expanded) => {
+      section.classList.toggle('expanded', expanded);
+      section.classList.toggle('collapsed', !expanded);
+      body.style.maxHeight = expanded ? `${body.scrollHeight}px` : '0px';
+      body.style.opacity = expanded ? '1' : '0';
+      headerBtn.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+    };
+    applyState(isExpanded);
+
+    headerBtn.addEventListener('click', () => {
+      const next = !expandedSet.has(id);
+      if (next) {
+        expandedSet.add(id);
+      } else {
+        expandedSet.delete(id);
+      }
+      applyState(next);
+    });
+
+    return section;
+  };
+
   cases.forEach((item) => {
     const card = document.createElement('div');
     card.className = 'case-card';
+    card.dataset.caseId = item.id;
     card.id = `card-${item.id}`;
-    const priceCollapsed = state.priceInfoCollapsed.has(item.id);
-    card.innerHTML = `
-      <h3>${item.sopPrice} CNY</h3>
-      <h4>${item.client} – ${item.project} – ${item.product} ｜ SOP ${item.sopYear}</h4>
-      <div class="card-section">
-        <strong>1. Project Info</strong>
-        <dl>
-          <dt>Client</dt><dd>${item.client}</dd>
-          <dt>Project</dt><dd>${item.project}</dd>
-          <dt>Product</dt><dd>${item.product}</dd>
-          <dt>SOP</dt><dd>${item.sopYear}</dd>
-          <dt>Competitor</dt><dd>${item.competitor}</dd>
-          <dt>Tech</dt><dd>${item.tech.join(', ')}</dd>
-          <dt>Lead Month</dt><dd>${formatMonth(item.leadMonth)}</dd>
-          <dt>Submitter</dt><dd>${item.submitter}</dd>
-        </dl>
-      </div>
-      <div class="card-section price-info ${priceCollapsed ? 'collapsed' : 'expanded'}">
-        <button class="collapse-toggle" type="button" data-price-toggle>
-          <span>2. Price Info</span>
-          <span class="chevron" aria-hidden="true">▸</span>
-        </button>
-        <div class="price-info-body">
-          <dl>
-            ${Object.keys(item.prices).map((year) => `<dt>${year}</dt><dd>${item.prices[year]} CNY</dd>`).join('')}
-            <dt>PCR Rate</dt><dd>${item.pcrRate ?? '-'}%</dd>
-            <dt>PCR Years</dt><dd>${item.pcrYears ?? '-'}</dd>
-          </dl>
-        </div>
-      </div>
-      <div class="card-section">
-        <details>
-          <summary>3. Background Info</summary>
-          <p><strong>Remarks:</strong> ${item.remarks}</p>
-          <p><strong>Source Type:</strong> ${item.source}</p>
-          <p><strong>Special Terms:</strong> ${item.terms || 'None'}</p>
-          <p><strong>Attachments:</strong> ${item.attachments.length ? item.attachments.join(', ') : 'None'}</p>
-        </details>
-      </div>
-      <div class="card-actions">
-        <button data-pin="${item.id}">📌 Pin</button>
-        <button data-hide="${item.id}">👁 Hide</button>
-      </div>
+    const header = document.createElement('div');
+    header.className = 'card-header';
+    header.innerHTML = `
+      <h3>${formatCurrency(item.sopPrice)}</h3>
+      <h4>${item.client} – ${item.project} – ${item.product} | SOP ${item.sopYear}</h4>
     `;
-    card.querySelector('[data-pin]').addEventListener('click', () => {
-      if (state.pinned.has(item.id)) {
-        state.pinned.delete(item.id);
-      } else {
-        state.pinned.add(item.id);
-      }
-      renderApp();
+    card.appendChild(header);
+
+    const projectSection = document.createElement('section');
+    projectSection.className = 'info-section static';
+    const projectTitle = document.createElement('h5');
+    projectTitle.textContent = '1. Project Info';
+    const projectBody = document.createElement('div');
+    projectBody.className = 'section-body static-body';
+    projectBody.innerHTML = `
+      <p><strong>Client:</strong> ${item.client}</p>
+      <p><strong>Project:</strong> ${item.project}</p>
+      <p><strong>Product:</strong> ${item.product}</p>
+      <p><strong>Competitor:</strong> ${item.competitor}</p>
+      <p><strong>Tech:</strong> ${item.tech.join(', ')}</p>
+      <p><strong>SOP Year:</strong> ${item.sopYear}</p>
+      <p><strong>Lead Month:</strong> ${item.leadMonth}</p>
+      <p><strong>Submitter:</strong> ${item.submitter}</p>
+      <p><strong>Volume:</strong> ${item.volume?.toLocaleString?.() || '—'} units</p>
+    `;
+    projectSection.append(projectTitle, projectBody);
+    card.appendChild(projectSection);
+
+    const priceSection = buildCollapsible('2. Price Info', state.expandedPriceSections, item.id, () => `
+      ${Object.keys(item.prices)
+        .map((year) => `<p><strong>${year}:</strong> ${formatCurrency(item.prices[year])}</p>`)
+        .join('')}
+      <p><strong>PCR Rate:</strong> ${item.pcrRate ? `${item.pcrRate}%` : '—'}</p>
+      <p><strong>PCR Years:</strong> ${item.pcrYears ?? '—'}</p>
+    `);
+    card.appendChild(priceSection);
+
+    const backgroundSection = buildCollapsible('3. Background Info', state.expandedBackgroundSections, item.id, () => `
+      <p><strong>Remarks:</strong> ${item.remarks || '—'}</p>
+      <p><strong>Source Type:</strong> ${item.source || '—'}</p>
+      <p><strong>Special Terms:</strong> ${item.terms || 'None'}</p>
+      <p><strong>Attachments:</strong> ${item.attachments.length ? item.attachments.join(', ') : 'None'}</p>
+    `);
+    card.appendChild(backgroundSection);
+
+    const actions = document.createElement('div');
+    actions.className = 'card-actions';
+    const editBtn = document.createElement('button');
+    editBtn.type = 'button';
+    editBtn.className = 'edit-case';
+    editBtn.dataset.edit = item.id;
+    editBtn.textContent = '✏️ Edit';
+    editBtn.addEventListener('click', () => {
+      openEditModal(item.id);
     });
-    card.querySelector('[data-hide]').addEventListener('click', () => {
-      state.hidden.add(item.id);
-      renderApp();
-    });
-    const priceSection = card.querySelector('.price-info');
-    const body = priceSection.querySelector('.price-info-body');
-    requestAnimationFrame(() => {
-      body.style.maxHeight = priceSection.classList.contains('collapsed') ? '0px' : `${body.scrollHeight}px`;
-    });
-    priceSection.querySelector('[data-price-toggle]').addEventListener('click', () => {
-      const willCollapse = !priceSection.classList.contains('collapsed');
-      priceSection.classList.toggle('collapsed', willCollapse);
-      priceSection.classList.toggle('expanded', !willCollapse);
-      if (willCollapse) {
-        state.priceInfoCollapsed.add(item.id);
-        body.style.maxHeight = '0px';
-      } else {
-        state.priceInfoCollapsed.delete(item.id);
-        body.style.maxHeight = `${body.scrollHeight}px`;
-      }
-    });
+    actions.appendChild(editBtn);
+    card.appendChild(actions);
+
     container.appendChild(card);
   });
   panel.appendChild(container);
@@ -1747,20 +1353,158 @@ function renderDetailCards(cases) {
 function highlightCase(caseId) {
   const card = document.getElementById(`card-${caseId}`);
   if (!card) return;
-  card.classList.add('highlight', 'glow');
+  card.classList.add('highlighted', 'glow');
   card.scrollIntoView({ behavior: 'smooth', block: 'center' });
   setTimeout(() => card.classList.remove('glow'), 1000);
-  setTimeout(() => card.classList.remove('highlight'), 1200);
+  setTimeout(() => card.classList.remove('highlighted'), 1200);
 }
 
 // -----------------------------
-// Floating Button / Modal Logic
+// Messages panel
+// -----------------------------
+const messagesBtn = document.getElementById('messagesBtn');
+const messagesPanel = document.getElementById('messagesPanel');
+const messagesList = document.getElementById('messagesList');
+const markAllBtn = document.getElementById('markAllRead');
+
+function renderMessagesPanel() {
+  if (!messagesPanel) return;
+  messagesList.innerHTML = '';
+  const sorted = messageFeed
+    .slice()
+    .sort((a, b) => {
+      if (state.messageSort === 'date') {
+        return a.received < b.received ? 1 : -1;
+      }
+      const caseA = getCaseById(a.caseId);
+      const caseB = getCaseById(b.caseId);
+      const valueA = caseA ? getMinPrice(caseA) : Infinity;
+      const valueB = caseB ? getMinPrice(caseB) : Infinity;
+      if (valueA === valueB) {
+        return a.received < b.received ? 1 : -1;
+      }
+      return valueA - valueB;
+    });
+
+  sorted.forEach((msg) => {
+    const caseData = getCaseById(msg.caseId);
+    if (!caseData) return;
+    const card = document.createElement('div');
+    card.className = 'messages-card';
+    if (!msg.read) {
+      card.classList.add('flash');
+      setTimeout(() => card.classList.remove('flash'), 300);
+    }
+    const title = `${caseData.sopPrice} – ${caseData.competitor} – ${caseData.product} – ${caseData.client} – ${caseData.project} – SOP ${caseData.sopYear}`;
+    card.innerHTML = `
+      <h4>${title}</h4>
+      <span>Line received: ${msg.received}</span>
+      <span class="message-status ${statusClassMap[msg.status] || 'status-normal'}">${msg.status}</span>
+    `;
+    card.addEventListener('click', () => {
+      applyMessageCase(msg);
+    });
+    messagesList.appendChild(card);
+  });
+
+  messagesPanel.querySelectorAll('.messages-sort button').forEach((btn) => {
+    btn.classList.toggle('active', btn.dataset.sort === state.messageSort);
+  });
+}
+
+function openMessagesPanel() {
+  if (!messagesPanel) return;
+  renderMessagesPanel();
+  messagesPanel.classList.remove('hidden');
+  requestAnimationFrame(() => {
+    messagesPanel.classList.add('open');
+  });
+  messagesBtn.setAttribute('aria-expanded', 'true');
+  state.messagesOpen = true;
+}
+
+function closeMessagesPanel() {
+  if (!messagesPanel || messagesPanel.classList.contains('hidden')) return;
+  messagesPanel.classList.remove('open');
+  messagesBtn.setAttribute('aria-expanded', 'false');
+  state.messagesOpen = false;
+  setTimeout(() => {
+    messagesPanel.classList.add('hidden');
+  }, 200);
+}
+
+function applyMessageCase(message) {
+  const caseData = getCaseById(message.caseId);
+  if (!caseData) return;
+  message.read = true;
+  state.unreadMessages = messageFeed.filter((m) => !m.read).length;
+  state.filters = {
+    time: state.filters.time,
+    product: caseData.product,
+    competitors: [caseData.competitor],
+    tech: [...caseData.tech],
+    sopYear: caseData.sopYear,
+    more: { customer: null, volume: null, terms: null }
+  };
+  state.chartSort = 'recent';
+  state.pendingHighlight = caseData.id;
+  showToast('🔍 Filter updated by selected case', 'highlight');
+  closeMessagesPanel();
+  queueFilterToast();
+  renderApp();
+}
+
+messagesBtn.addEventListener('click', (event) => {
+  event.stopPropagation();
+  if (state.messagesOpen) {
+    closeMessagesPanel();
+  } else {
+    openMessagesPanel();
+  }
+});
+
+if (markAllBtn) {
+  markAllBtn.addEventListener('click', () => {
+    messageFeed.forEach((msg) => {
+      msg.read = true;
+    });
+    state.unreadMessages = 0;
+    renderMessagesPanel();
+    updateMessagesBadge();
+  });
+}
+
+if (messagesPanel) {
+  messagesPanel.addEventListener('click', (e) => e.stopPropagation());
+  messagesPanel.querySelectorAll('.messages-sort button').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      state.messageSort = btn.dataset.sort;
+      renderMessagesPanel();
+    });
+  });
+}
+
+document.addEventListener('click', () => {
+  if (state.messagesOpen) {
+    closeMessagesPanel();
+  }
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    if (state.messagesOpen) closeMessagesPanel();
+    if (!newLeadModal.classList.contains('hidden')) closeLeadModal();
+    if (!confirmModal.classList.contains('hidden')) closeConfirm();
+  }
+});
+// -----------------------------
+// Modal logic & toasts
 // -----------------------------
 const newLeadBtn = document.getElementById('newLeadBtn');
 const newLeadModal = document.getElementById('newLeadModal');
+const leadModalTitle = newLeadModal.querySelector('.modal-header h3');
 const leadForm = document.getElementById('leadForm');
 const toast = document.getElementById('toast');
-const hideHintCheckbox = document.getElementById('hideHintCheckbox');
 const confirmModal = document.getElementById('confirmModal');
 const confirmTitleEl = document.getElementById('confirmTitle');
 const confirmMessageEl = document.getElementById('confirmMessage');
@@ -1783,133 +1527,181 @@ function closeConfirm() {
   confirmState = null;
 }
 
-hideHintCheckbox.addEventListener('change', (e) => {
-  state.dontShowHint = e.target.checked;
-  if (e.target.checked) {
-    document.getElementById('chartHintModal').classList.add('hidden');
-  }
-});
-
-newLeadBtn.addEventListener('click', () => {
-  const context = getContextDefaults();
-  document.getElementById('leadProduct').value = context.product || '';
-  document.getElementById('leadCompetitor').value = context.competitor || '';
-  document.getElementById('leadTech').value = context.tech || '';
-  newLeadModal.classList.remove('hidden');
-});
-
-newLeadModal.addEventListener('click', (e) => {
-  if (e.target.dataset.close !== undefined || e.target === newLeadModal) {
-    closeLeadModal();
-  }
-});
-
-confirmModal.addEventListener('click', (e) => {
-  if (e.target === confirmModal) {
-    closeConfirm();
-  }
-});
-
-confirmCancelBtn.addEventListener('click', () => {
-  closeConfirm();
-});
-
+confirmCancelBtn.addEventListener('click', () => closeConfirm());
 confirmOkBtn.addEventListener('click', () => {
   const callback = confirmState?.onConfirm;
   closeConfirm();
   if (callback) callback();
 });
 
-function closeLeadModal() {
-  newLeadModal.classList.add('hidden');
-  leadForm.reset();
-}
-
-leadForm.addEventListener('submit', (e) => {
-  e.preventDefault();
-  const techInput = document.getElementById('leadTech').value;
-  const leadMonthValue = state.mode === 'explore' ? state.exploreMonth : getLatestLeadMonth();
-  const newCase = {
-    id: `C${Math.floor(1000 + Math.random() * 9000)}`,
-    client: document.getElementById('leadCustomer').value,
-    project: document.getElementById('leadProject').value,
-    product: document.getElementById('leadProduct').value || state.filters.product,
-    competitor: document.getElementById('leadCompetitor').value || (state.filters.competitors[0] || 'Conti'),
-    tech: techInput ? techInput.split(',').map((v) => v.trim()).filter(Boolean) : [...state.filters.tech],
-    sopYear: Number(document.getElementById('leadSop').value),
-    sopPrice: Number(document.getElementById('leadPrice').value),
-    prices: {},
-    pcrRate: Number(document.getElementById('leadPcrRate').value) || null,
-    pcrYears: Number(document.getElementById('leadPcrYears').value) || null,
-    competitorProduct: document.getElementById('leadCompProduct').value || null,
-    leadMonth: leadMonthValue,
-    tier: 'L1',
-    source: 'User Submitted',
-    remarks: document.getElementById('leadTerms').value ? `Terms: ${document.getElementById('leadTerms').value}` : 'User supplied lead.',
-    terms: document.getElementById('leadTerms').value,
-    attachments: [],
-    submitter: 'You',
-    leadDate: `${leadMonthValue}-20`
-  };
-  const baseYear = newCase.sopYear;
-  for (let i = 0; i < 5; i++) {
-    newCase.prices[baseYear + i] = Math.max(newCase.sopPrice - i * 20, 0);
-  }
-  caseDataset.unshift(newCase);
-  closeLeadModal();
-  showToast('✅ New price lead saved successfully!');
-  renderApp();
+confirmModal.addEventListener('click', (e) => {
+  if (e.target === confirmModal) closeConfirm();
 });
 
 function getContextDefaults() {
-  if (state.mode === 'focus') {
-    return {
-      product: state.filters.product,
-      competitor: state.filters.competitors.join(', '),
-      tech: state.filters.tech.join(', ')
-    };
-  }
-  const segment = state.exploreSegment;
   return {
-    product: segment?.filter.product || state.filters.product,
-    competitor: segment?.filter.competitors?.join(', ') || state.filters.competitors.join(', '),
-    tech: segment?.filter.tech?.join(', ') || state.filters.tech.join(', ')
+    product: state.filters.product,
+    competitor: state.filters.competitors.join(', '),
+    tech: state.filters.tech.join(', ')
   };
 }
 
-function showToast(message) {
+function openLeadModalForCreate() {
+  state.leadModalMode = 'create';
+  state.editingCaseId = null;
+  leadModalTitle.textContent = 'New Price Lead';
+  document.body.classList.remove('editing-case-active');
+  const context = getContextDefaults();
+  document.getElementById('leadProduct').value = context.product || '';
+  document.getElementById('leadCompetitor').value = context.competitor || '';
+  document.getElementById('leadTech').value = context.tech || '';
+  document.getElementById('leadCustomer').value = '';
+  document.getElementById('leadProject').value = '';
+  document.getElementById('leadVolume').value = '';
+  document.getElementById('leadSop').value = state.filters.sopYear || '';
+  document.getElementById('leadPrice').value = '';
+  document.getElementById('leadPcrRate').value = '';
+  document.getElementById('leadPcrYears').value = '';
+  document.getElementById('leadCompProduct').value = '';
+  document.getElementById('leadTerms').value = '';
+  newLeadModal.classList.remove('hidden');
+}
+
+function openEditModal(caseId) {
+  const item = getCaseById(caseId);
+  if (!item) return;
+  state.leadModalMode = 'edit';
+  state.editingCaseId = caseId;
+  leadModalTitle.textContent = 'Edit Case';
+  document.body.classList.add('editing-case-active');
+  document.getElementById('leadProduct').value = item.product;
+  document.getElementById('leadCompetitor').value = item.competitor;
+  document.getElementById('leadTech').value = item.tech.join(', ');
+  document.getElementById('leadCustomer').value = item.client;
+  document.getElementById('leadProject').value = item.project;
+  document.getElementById('leadVolume').value = item.volume || '';
+  document.getElementById('leadSop').value = item.sopYear;
+  document.getElementById('leadPrice').value = item.sopPrice;
+  document.getElementById('leadPcrRate').value = item.pcrRate ?? '';
+  document.getElementById('leadPcrYears').value = item.pcrYears ?? '';
+  document.getElementById('leadCompProduct').value = item.competitorProduct || '';
+  document.getElementById('leadTerms').value = item.terms || '';
+  newLeadModal.classList.remove('hidden');
+}
+
+function closeLeadModal() {
+  newLeadModal.classList.add('hidden');
+  leadForm.reset();
+  state.leadModalMode = 'create';
+  state.editingCaseId = null;
+  document.body.classList.remove('editing-case-active');
+}
+
+if (newLeadBtn) {
+  newLeadBtn.addEventListener('click', () => {
+    openLeadModalForCreate();
+  });
+}
+
+if (newLeadModal) {
+  newLeadModal.addEventListener('click', (e) => {
+    if (e.target.dataset.close !== undefined || e.target === newLeadModal) {
+      closeLeadModal();
+    }
+  });
+}
+
+function showToast(message, type = 'info') {
+  const toneClasses = ['info', 'success', 'warning', 'highlight'];
   toast.textContent = message;
+  toast.classList.remove('show', ...toneClasses, 'hidden');
+  void toast.offsetWidth; // restart animation
+  toast.classList.add(type);
   toast.classList.add('show');
-  toast.classList.remove('hidden');
   setTimeout(() => {
     toast.classList.remove('show');
     setTimeout(() => toast.classList.add('hidden'), 300);
   }, 2000);
 }
 
-// -----------------------------
-// Mode Switch & Modal handlers
-// -----------------------------
-document.querySelectorAll('.mode-switch-bar .mode-tab').forEach((btn) => {
-  btn.addEventListener('click', () => {
-    state.mode = btn.dataset.mode;
+leadForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const product = document.getElementById('leadProduct').value || state.filters.product;
+  const competitorsText = document.getElementById('leadCompetitor').value || state.filters.competitors.join(', ');
+  const techText = document.getElementById('leadTech').value || state.filters.tech.join(', ');
+  const techArray = techText ? techText.split(',').map((v) => v.trim()).filter(Boolean) : [];
+  const competitorArray = competitorsText ? competitorsText.split(',').map((v) => v.trim()).filter(Boolean) : [];
+  const formData = {
+    client: document.getElementById('leadCustomer').value,
+    project: document.getElementById('leadProject').value,
+    volume: Number(document.getElementById('leadVolume').value) || null,
+    sopYear: Number(document.getElementById('leadSop').value),
+    sopPrice: Number(document.getElementById('leadPrice').value),
+    pcrRate: document.getElementById('leadPcrRate').value ? Number(document.getElementById('leadPcrRate').value) : null,
+    pcrYears: document.getElementById('leadPcrYears').value ? Number(document.getElementById('leadPcrYears').value) : null,
+    competitorProduct: document.getElementById('leadCompProduct').value || null,
+    terms: document.getElementById('leadTerms').value || null
+  };
+
+  if (state.leadModalMode === 'edit' && state.editingCaseId) {
+    const existing = getCaseById(state.editingCaseId);
+    if (existing) {
+      existing.client = formData.client;
+      existing.project = formData.project;
+      existing.volume = formData.volume;
+      existing.sopYear = formData.sopYear;
+      existing.sopPrice = formData.sopPrice;
+      existing.pcrRate = formData.pcrRate;
+      existing.pcrYears = formData.pcrYears;
+      existing.terms = formData.terms;
+      existing.competitorProduct = formData.competitorProduct;
+      existing.tech = techArray.length ? techArray : existing.tech;
+      existing.competitor = competitorArray[0] || existing.competitor;
+      existing.product = product;
+      const priceSpan = Object.keys(existing.prices).length || 5;
+      const newPrices = {};
+      for (let i = 0; i < priceSpan; i++) {
+        newPrices[formData.sopYear + i] = Math.max(formData.sopPrice - i * 20, 0);
+      }
+      existing.prices = newPrices;
+    }
+    closeLeadModal();
+    showToast('✅ Case updated successfully', 'success');
     renderApp();
-  });
+    return;
+  }
+
+  const leadMonthValue = getLatestLeadMonth();
+  const newCase = {
+    id: `C${Math.floor(1000 + Math.random() * 9000)}`,
+    client: formData.client,
+    project: formData.project,
+    product,
+    competitor: competitorArray[0] || state.filters.competitors[0] || 'Conti',
+    tech: techArray.length ? techArray : [...state.filters.tech],
+    sopYear: formData.sopYear,
+    sopPrice: formData.sopPrice,
+    prices: {},
+    pcrRate: formData.pcrRate,
+    pcrYears: formData.pcrYears,
+    leadMonth: leadMonthValue,
+    tier: 'L1',
+    source: 'User Submitted',
+    remarks: formData.terms ? `Terms: ${formData.terms}` : 'User supplied lead.',
+    terms: formData.terms,
+    attachments: [],
+    submitter: 'You',
+    leadDate: `${leadMonthValue}-20`,
+    volume: formData.volume,
+    competitorProduct: formData.competitorProduct
+  };
+  for (let i = 0; i < 5; i++) {
+    newCase.prices[formData.sopYear + i] = Math.max(formData.sopPrice - i * 20, 0);
+  }
+  caseDataset.unshift(newCase);
+  closeLeadModal();
+  showToast('✅ New price lead added', 'success');
+  renderApp();
 });
 
-document.getElementById('chartHintModal').addEventListener('click', (e) => {
-  if (e.target.id === 'chartHintModal') {
-    e.currentTarget.classList.add('hidden');
-  }
-  if (e.target.id === 'adjustFilters') {
-    state.mode = 'focus';
-    e.currentTarget.classList.add('hidden');
-    renderApp();
-  }
-  if (e.target.id === 'advancedFilter') {
-    alert('Advanced filters are part of the enterprise release.');
-  }
-});
-
-// Initial render
 renderApp();
